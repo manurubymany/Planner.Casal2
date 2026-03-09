@@ -4,561 +4,899 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pedro & Manu ♡</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  /* ══════════════════════════════════════════════════
+     PEDRO & MANU — Design System
+     Aesthetic: Intimate editorial — warm ink on cotton
+  ══════════════════════════════════════════════════ */
   :root {
-    --cream: #fdf6f0;
-    --warm: #f5e6d8;
-    --blush: #e8c4b0;
-    --rose: #c97b63;
-    --deep: #7a3e2f;
-    --terra: #a05540;
-    --green: #4a7c59;
-    --green-light: #d4ead9;
-    --red-soft: #c0444a;
-    --red-light: #fce8e9;
-    --text: #2d1f1a;
-    --text-soft: #7a6560;
-    --shadow: rgba(122,62,47,0.12);
-    --radius: 16px;
-    --pedro-primary: #3b5fa0;
-    --pedro-light: #dce6f7;
-    --pedro-soft: #eef3fc;
-    --pedro-accent: #5b7fc0;
-    --manu-primary: #b05080;
-    --manu-light: #f5d9ea;
-    --manu-soft: #fdf0f7;
-    --manu-accent: #cf78a8;
+    /* Base palette */
+    --ink:        #1e1510;
+    --ink-soft:   #6b5a52;
+    --parch:      #faf6f0;
+    --parch-warm: #f3ebe0;
+    --parch-deep: #e9ddd0;
+    --line:       #ddd0c4;
+
+    /* Accent — terracotta */
+    --terra:      #b5613c;
+    --terra-light:#f0ddd4;
+    --terra-glow: rgba(181,97,60,0.18);
+
+    /* User colours */
+    --p-hue: #2f5496;
+    --p-bg:  #eaf0fb;
+    --p-mid: #c0d0f0;
+    --m-hue: #9e3d72;
+    --m-bg:  #fbe8f3;
+    --m-mid: #edbcda;
+
+    /* Semantic */
+    --green:      #3d7a54;
+    --green-bg:   #dff0e8;
+    --red:        #b03a3a;
+    --red-bg:     #fce8e8;
+    --amber:      #8a6010;
+    --amber-bg:   #fdf4d8;
+
+    --radius-sm: 10px;
+    --radius:    16px;
+    --radius-lg: 22px;
+    --shadow-card: 0 2px 12px rgba(30,21,16,0.07), 0 1px 3px rgba(30,21,16,0.04);
+    --shadow-raised: 0 8px 28px rgba(30,21,16,0.12), 0 2px 8px rgba(30,21,16,0.06);
+    --shadow-modal: 0 24px 64px rgba(30,21,16,0.22);
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
   body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    background: var(--parch);
+    color: var(--ink);
     min-height: 100vh;
     overflow-x: hidden;
   }
+
+  /* Subtle paper texture overlay */
   body::before {
     content: '';
-    position: fixed; top: -200px; right: -200px;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, #f5ddd070 0%, transparent 70%);
-    pointer-events: none; z-index: 0;
-  }
-  body::after {
-    content: '';
-    position: fixed; bottom: -150px; left: -150px;
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, #e8c4b030 0%, transparent 70%);
-    pointer-events: none; z-index: 0;
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 80% -10%, rgba(243,235,224,0.8) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at -10% 100%, rgba(233,221,208,0.6) 0%, transparent 60%);
   }
 
-  /* ═══════════════════════════════════════
-     LOGIN SCREEN
-  ═══════════════════════════════════════ */
+  /* ══════════════════════════════════════
+     LOGIN
+  ══════════════════════════════════════ */
   #login-screen {
     position: fixed; inset: 0; z-index: 9000;
-    background: linear-gradient(160deg, var(--deep) 0%, var(--terra) 45%, var(--rose) 100%);
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     padding: 24px;
-    animation: fadeIn 0.4s ease;
+    background: linear-gradient(155deg, #1e1510 0%, #4a2418 50%, #7a3820 100%);
+    overflow: hidden;
   }
   #login-screen::before {
     content: '';
-    position: absolute; inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
-    pointer-events: none;
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 20%, rgba(181,97,60,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 70% at 80% 80%, rgba(181,97,60,0.15) 0%, transparent 60%);
   }
+  #login-screen::after {
+    content: '';
+    position: absolute; inset: 0; pointer-events: none; opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='%23fff' fill-opacity='1'/%3E%3C/svg%3E");
+  }
+
   .login-heart {
-    font-size: 52px;
-    animation: pulse 2s ease-in-out infinite;
-    margin-bottom: 8px; position: relative;
+    font-size: 48px;
+    animation: heartbeat 2.2s ease-in-out infinite;
+    margin-bottom: 10px; position: relative; z-index: 1;
+    filter: drop-shadow(0 4px 16px rgba(181,97,60,0.6));
+  }
+  @keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    14% { transform: scale(1.18); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.1); }
+    56% { transform: scale(1); }
   }
   .login-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(30px, 8vw, 48px);
-    color: #fff; letter-spacing: -0.5px;
-    margin-bottom: 4px; position: relative;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(34px, 9vw, 52px);
+    color: #fff; letter-spacing: 1px;
+    margin-bottom: 4px; position: relative; z-index: 1;
+    text-shadow: 0 2px 20px rgba(181,97,60,0.4);
   }
-  .login-title em { font-style: italic; opacity: 0.8; font-size: 0.7em; }
+  .login-title em { font-style: italic; opacity: 0.7; font-size: 0.65em; letter-spacing: 0; }
   .login-sub {
-    color: rgba(255,255,255,0.65);
-    font-size: 13px; margin-bottom: 36px;
-    letter-spacing: 0.3px; position: relative;
+    color: rgba(255,255,255,0.5);
+    font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 36px; position: relative; z-index: 1;
+    font-weight: 500;
   }
   .login-card {
-    background: #fff;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(20px);
     border-radius: 24px;
-    padding: 28px 24px 24px;
+    padding: 32px 28px 28px;
     width: 100%; max-width: 360px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-    position: relative;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.1);
+    position: relative; z-index: 1;
+    animation: loginCardIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes loginCardIn {
+    from { opacity: 0; transform: translateY(32px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
   }
   .login-card h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px; color: var(--deep);
-    margin-bottom: 20px; text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; color: var(--ink);
+    margin-bottom: 24px; text-align: center; font-weight: 600;
   }
-  .login-field {
-    margin-bottom: 14px;
-  }
+  .login-field { margin-bottom: 16px; }
   .login-field label {
-    display: block; font-size: 12px; font-weight: 600;
-    color: var(--text-soft); margin-bottom: 6px;
-    text-transform: uppercase; letter-spacing: 0.5px;
+    display: block; font-size: 11px; font-weight: 600;
+    color: var(--ink-soft); margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: 0.8px;
   }
   .login-field input {
-    width: 100%; padding: 12px 16px;
-    border: 2px solid var(--blush);
-    border-radius: var(--radius);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px; color: var(--text);
-    outline: none; transition: border-color 0.2s;
-    background: var(--cream);
+    width: 100%; padding: 13px 16px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px; color: var(--ink);
+    outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    background: var(--parch);
   }
-  .login-field input:focus { border-color: var(--rose); }
+  .login-field input:focus {
+    border-color: var(--terra);
+    box-shadow: 0 0 0 3px var(--terra-glow);
+  }
   .login-error {
-    font-size: 12px; color: var(--red-soft);
+    font-size: 12px; color: var(--red);
     text-align: center; margin-bottom: 12px;
-    min-height: 18px;
+    min-height: 18px; font-weight: 500;
   }
   .btn-login {
     width: 100%; padding: 14px;
-    background: linear-gradient(135deg, var(--terra), var(--rose));
-    color: #fff; border: none; border-radius: var(--radius);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px; font-weight: 700;
+    background: var(--terra);
+    color: #fff; border: none; border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px; font-weight: 600;
     cursor: pointer; letter-spacing: 0.3px;
-    box-shadow: 0 6px 20px rgba(201,123,99,0.4);
-    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 20px rgba(181,97,60,0.45);
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    position: relative; overflow: hidden;
   }
-  .btn-login:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(201,123,99,0.5); }
+  .btn-login::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(181,97,60,0.5); background: #c46840; }
   .btn-login:active { transform: scale(0.97); }
 
-  /* ═══════════════════════════════════════
+  /* ══════════════════════════════════════
+     APP WRAPPER — no-flicker
+  ══════════════════════════════════════ */
+  #app { visibility: hidden; opacity: 0; transition: opacity 0.3s ease; }
+  #app.ready { visibility: visible; opacity: 1; }
+
+  /* ══════════════════════════════════════
      HEADER
-  ═══════════════════════════════════════ */
+  ══════════════════════════════════════ */
   header {
-    background: linear-gradient(135deg, var(--deep) 0%, var(--terra) 55%, var(--rose) 100%);
-    padding: 20px 20px 18px;
+    background: linear-gradient(135deg, #1e1510 0%, #3d2010 55%, var(--terra) 100%);
+    padding: 16px 20px 14px;
     text-align: center;
     position: relative; overflow: hidden;
   }
   header::before {
     content: '';
-    position: absolute; inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 80% 120% at 50% -20%, rgba(181,97,60,0.5) 0%, transparent 65%);
   }
-
-  /* Gear + Logout buttons in header corners */
   .header-corner {
-    position: absolute; top: 14px;
-    display: flex; gap: 8px; z-index: 10;
+    position: absolute; top: 12px;
+    display: flex; gap: 6px; z-index: 10;
   }
   .header-corner.left { left: 14px; }
   .header-corner.right { right: 14px; }
-
   .btn-icon-header {
-    width: 36px; height: 36px; border-radius: 50%;
-    border: 1.5px solid rgba(255,255,255,0.3);
-    background: rgba(255,255,255,0.12);
-    color: #fff; font-size: 16px; cursor: pointer;
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.85); font-size: 14px; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: background 0.2s, transform 0.15s;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
   }
-  .btn-icon-header:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
+  .btn-icon-header:hover { background: rgba(255,255,255,0.2); transform: scale(1.08); }
 
   .header-heart {
-    font-size: 22px;
-    animation: pulse 2s ease-in-out infinite;
-    display: block; margin-bottom: 2px; position: relative;
+    font-size: 18px;
+    animation: heartbeat 2.2s ease-in-out infinite;
+    display: block; margin-bottom: 1px; position: relative;
+    filter: drop-shadow(0 0 8px rgba(255,160,100,0.6));
   }
   @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
   header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(24px, 6vw, 38px);
-    color: #fff; letter-spacing: -0.5px; line-height: 1.1; position: relative;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 6vw, 34px);
+    color: #fff; letter-spacing: 1px; line-height: 1.1; position: relative;
+    text-shadow: 0 2px 16px rgba(181,97,60,0.5);
   }
-  header h1 em { font-style: italic; opacity: 0.85; font-size: 0.7em; }
+  header h1 em { font-style: italic; opacity: 0.75; font-size: 0.65em; letter-spacing: 0; }
 
-  /* Logged-in user pill */
   #logged-pill {
     display: inline-flex; align-items: center; gap: 6px;
-    margin-top: 8px;
-    padding: 4px 12px;
-    background: rgba(255,255,255,0.15);
+    margin-top: 6px;
+    padding: 4px 12px 4px 8px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: 20px;
-    font-size: 12px; color: rgba(255,255,255,0.85);
+    font-size: 11px; color: rgba(255,255,255,0.8);
     font-weight: 500; position: relative;
+    letter-spacing: 0.3px;
   }
   #logged-pill .pill-dot {
-    width: 7px; height: 7px; border-radius: 50%; background: #5dca7a;
+    width: 6px; height: 6px; border-radius: 50%; background: #5dca7a;
+    box-shadow: 0 0 6px rgba(93,202,122,0.7);
   }
-
   #sync-status {
     display: flex; align-items: center; justify-content: center;
-    gap: 6px; margin-top: 6px; font-size: 11px;
-    color: rgba(255,255,255,0.55); position: relative;
+    gap: 5px; margin-top: 4px; font-size: 10px;
+    color: rgba(255,255,255,0.4); position: relative; letter-spacing: 0.3px;
   }
   #sync-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: #ffd700; transition: background 0.3s;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: rgba(255,215,0,0.8); transition: background 0.3s;
   }
-  #sync-dot.connected { background: #5dca7a; }
+  #sync-dot.connected { background: #5dca7a; box-shadow: 0 0 5px rgba(93,202,122,0.6); }
   #sync-dot.error { background: #ff6b6b; }
 
   #btn-download {
-    display: inline-flex; align-items: center; gap: 6px;
-    margin-top: 12px; padding: 7px 16px;
-    background: rgba(255,255,255,0.13);
-    border: 1.5px solid rgba(255,255,255,0.3);
-    border-radius: 24px;
-    color: #fff; font-family: 'DM Sans', sans-serif;
-    font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+    display: inline-flex; align-items: center; gap: 5px;
+    margin-top: 10px; padding: 5px 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    color: rgba(255,255,255,0.6); font-family: 'Outfit', sans-serif;
+    font-size: 10px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase;
     cursor: pointer; position: relative;
-    transition: background 0.2s, transform 0.15s;
-    backdrop-filter: blur(4px);
+    transition: all 0.2s;
   }
-  #btn-download:hover { background: rgba(255,255,255,0.22); transform: translateY(-1px); }
+  #btn-download:hover { background: rgba(255,255,255,0.16); color: rgba(255,255,255,0.9); }
 
-  /* ═══════════════════════════════════════
+  /* ══════════════════════════════════════
      USER BAR
-  ═══════════════════════════════════════ */
+  ══════════════════════════════════════ */
   .user-bar {
-    background: #fff; border-bottom: 1px solid var(--warm);
-    display: flex; position: sticky; top: 0; z-index: 200;
-    box-shadow: 0 2px 12px var(--shadow);
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    position: sticky; top: 0; z-index: 200;
+    box-shadow: 0 2px 16px rgba(30,21,16,0.06);
   }
   .user-btn {
-    flex: 1; padding: 13px 8px 11px;
+    flex: 1; padding: 10px 8px 9px;
     border: none; background: none; cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px; font-weight: 600; color: var(--text-soft);
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px; font-weight: 600; color: var(--ink-soft);
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
     transition: all 0.2s; position: relative;
   }
   .user-btn .u-avatar {
-    width: 34px; height: 34px; border-radius: 50%;
+    width: 32px; height: 32px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 15px; font-weight: 700;
-    transition: all 0.2s; border: 2.5px solid transparent;
+    font-size: 13px; font-weight: 700;
+    transition: all 0.25s; border: 2px solid transparent;
   }
-  .user-btn.pedro .u-avatar { background: var(--pedro-soft); color: var(--pedro-primary); }
-  .user-btn.manu .u-avatar  { background: var(--manu-soft);  color: var(--manu-primary);  }
-  .user-btn.active.pedro { color: var(--pedro-primary); }
-  .user-btn.active.manu  { color: var(--manu-primary);  }
-  .user-btn.active.pedro .u-avatar { background: var(--pedro-light); border-color: var(--pedro-primary); transform: scale(1.1); }
-  .user-btn.active.manu  .u-avatar { background: var(--manu-light);  border-color: var(--manu-primary);  transform: scale(1.1); }
+  .user-btn.pedro .u-avatar { background: var(--p-bg); color: var(--p-hue); }
+  .user-btn.manu  .u-avatar { background: var(--m-bg); color: var(--m-hue); }
+  .user-btn.active.pedro { color: var(--p-hue); }
+  .user-btn.active.manu  { color: var(--m-hue);  }
+  .user-btn.active.pedro .u-avatar { background: var(--p-mid); border-color: var(--p-hue); transform: scale(1.12); box-shadow: 0 2px 10px rgba(47,84,150,0.3); }
+  .user-btn.active.manu  .u-avatar { background: var(--m-mid); border-color: var(--m-hue); transform: scale(1.12); box-shadow: 0 2px 10px rgba(158,61,114,0.3); }
   .user-btn::after {
     content: ''; position: absolute; bottom: 0; left: 50%;
     transform: translateX(-50%);
-    width: 0; height: 3px; border-radius: 3px 3px 0 0;
+    width: 0; height: 2px; border-radius: 2px 2px 0 0;
     transition: width 0.3s ease;
   }
-  .user-btn.active.pedro::after { width: 60%; background: var(--pedro-primary); }
-  .user-btn.active.manu::after  { width: 60%; background: var(--manu-primary);  }
-  .user-divider { width: 1px; background: var(--warm); margin: 10px 0; align-self: stretch; }
+  .user-btn.active.pedro::after { width: 55%; background: var(--p-hue); }
+  .user-btn.active.manu::after  { width: 55%; background: var(--m-hue); }
+  .user-divider { width: 1px; background: var(--line); margin: 8px 0; align-self: stretch; }
 
-  /* ═══════════════════════════════════════
+  /* ══════════════════════════════════════
      TABS
-  ═══════════════════════════════════════ */
+  ══════════════════════════════════════ */
   .tabs {
-    background: #fff; border-bottom: 1px solid var(--warm);
+    background: #fff;
+    border-bottom: 1px solid var(--line);
     display: flex; overflow-x: auto;
-    position: sticky; top: 61px; z-index: 100;
+    position: sticky; top: 55px; z-index: 100;
+    scrollbar-width: none;
   }
+  .tabs::-webkit-scrollbar { display: none; }
   .tab-btn {
-    flex: 1; min-width: 90px; padding: 11px 8px;
+    flex: 1; min-width: 85px; padding: 10px 8px 9px;
     border: none; background: none; cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px; font-weight: 500; color: var(--text-soft);
-    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px; font-weight: 500; color: var(--ink-soft);
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
     transition: all 0.2s; position: relative; white-space: nowrap;
+    letter-spacing: 0.2px;
   }
-  .tab-btn .tab-icon { font-size: 18px; }
+  .tab-btn .tab-icon { font-size: 17px; transition: transform 0.2s; }
+  .tab-btn.active .tab-icon { transform: scale(1.12); }
   .tab-btn::after {
     content: ''; position: absolute; bottom: 0; left: 50%;
     transform: translateX(-50%);
-    width: 0; height: 3px; border-radius: 3px 3px 0 0;
+    width: 0; height: 2.5px; border-radius: 2px 2px 0 0;
     transition: width 0.3s ease;
   }
   .tab-btn.active { font-weight: 700; }
-  body.is-pedro .tab-btn.active { color: var(--pedro-primary); }
-  body.is-pedro .tab-btn.active::after { width: 65%; background: var(--pedro-primary); }
-  body.is-manu  .tab-btn.active { color: var(--manu-primary);  }
-  body.is-manu  .tab-btn.active::after { width: 65%; background: var(--manu-primary);  }
+  body.is-pedro .tab-btn.active { color: var(--p-hue); }
+  body.is-pedro .tab-btn.active::after { width: 60%; background: var(--p-hue); }
+  body.is-manu  .tab-btn.active { color: var(--m-hue); }
+  body.is-manu  .tab-btn.active::after { width: 60%; background: var(--m-hue); }
 
-  /* ═══════════════════════════════════════
-     CONTENT
-  ═══════════════════════════════════════ */
+  /* ══════════════════════════════════════
+     CONTENT AREA
+  ══════════════════════════════════════ */
   .content {
     max-width: 680px; margin: 0 auto;
-    padding: 20px 16px 60px;
+    padding: 20px 16px 80px;
     position: relative; z-index: 1;
   }
-  .tab-panel { display: none; animation: fadeIn 0.25s ease; }
-  .tab-panel.active { display: block; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .tab-panel { display: none; }
+  .tab-panel.active {
+    display: block;
+    animation: panelIn 0.28s cubic-bezier(0.22,1,0.36,1);
+  }
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
+  /* ══════════════════════════════════════
+     USER BANNER
+  ══════════════════════════════════════ */
   .user-banner {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 16px; border-radius: var(--radius);
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px; border-radius: var(--radius);
     margin-bottom: 20px; font-size: 14px; font-weight: 500;
+    border: 1px solid transparent;
+    position: relative; overflow: hidden;
   }
-  .user-banner .bname { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; }
-  body.is-pedro .user-banner { background: var(--pedro-soft); color: var(--pedro-primary); border: 1.5px solid var(--pedro-light); }
-  body.is-manu  .user-banner { background: var(--manu-soft);  color: var(--manu-primary);  border: 1.5px solid var(--manu-light);  }
+  .user-banner::after {
+    content: '';
+    position: absolute; right: -30px; top: -30px;
+    width: 120px; height: 120px; border-radius: 50%;
+    opacity: 0.12; pointer-events: none;
+  }
+  body.is-pedro .user-banner { background: var(--p-bg); color: var(--p-hue); border-color: var(--p-mid); }
+  body.is-pedro .user-banner::after { background: var(--p-hue); }
+  body.is-manu  .user-banner { background: var(--m-bg); color: var(--m-hue); border-color: var(--m-mid); }
+  body.is-manu  .user-banner::after { background: var(--m-hue); }
+  .user-banner .bname { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; }
+  .user-banner .bsub { font-size: 11px; opacity: 0.7; font-weight: 400; letter-spacing: 0.3px; margin-top: 1px; }
 
+  /* ══════════════════════════════════════
+     SECTION HEADERS
+  ══════════════════════════════════════ */
+  .section-header-row {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 10px; margin-bottom: 12px;
+  }
   .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px; color: var(--deep);
-    margin: 22px 0 14px;
-    display: flex; align-items: center; gap: 10px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px; color: var(--ink);
+    display: flex; align-items: center; gap: 8px;
+    font-weight: 600; letter-spacing: 0.3px;
   }
-  .section-title:first-of-type { margin-top: 0; }
   .badge {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 10px; font-weight: 700;
-    padding: 3px 10px; border-radius: 20px;
-    letter-spacing: 0.4px; text-transform: uppercase;
+    font-family: 'Outfit', sans-serif;
+    font-size: 9px; font-weight: 700;
+    padding: 3px 8px; border-radius: 20px;
+    letter-spacing: 0.8px; text-transform: uppercase;
   }
-  .badge-green  { background: var(--green-light); color: var(--green); }
-  .badge-red    { background: var(--red-light);   color: var(--red-soft); }
-  .badge-blue   { background: #dce6f7; color: #3b5fa0; }
-  .badge-orange { background: #fff0e0; color: #c06000; }
+  .badge-green  { background: var(--green-bg);  color: var(--green); }
+  .badge-red    { background: var(--red-bg);    color: var(--red);   }
+  .badge-blue   { background: var(--p-bg);      color: var(--p-hue); }
+  .badge-orange { background: #fdebd8;          color: #8a4010;      }
 
-  .add-form { display: flex; gap: 8px; margin-bottom: 12px; }
-  .add-form input, .add-form select,
-  .field-row select, .field-row input {
-    padding: 11px 14px; border: 2px solid var(--blush);
-    border-radius: var(--radius);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px; color: var(--text);
-    background: #fff; outline: none; transition: border-color 0.2s;
-  }
-  .add-form input { flex: 1; }
-  .add-form input::placeholder { color: var(--text-soft); }
-  body.is-pedro .add-form input:focus,
-  body.is-pedro .add-form select:focus,
-  body.is-pedro .field-row input:focus,
-  body.is-pedro .field-row select:focus { border-color: var(--pedro-primary); }
-  body.is-manu .add-form input:focus,
-  body.is-manu .add-form select:focus,
-  body.is-manu .field-row input:focus,
-  body.is-manu .field-row select:focus { border-color: var(--manu-primary); }
-  .add-form select { flex: 0; min-width: 100px; cursor: pointer; }
-  .field-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-  .field-row input, .field-row select { flex: 1; min-width: 140px; }
-
+  /* ══════════════════════════════════════
+     ADD BUTTON (pill style)
+  ══════════════════════════════════════ */
   .btn-add {
-    width: 44px; height: 44px; flex-shrink: 0;
+    width: 42px; height: 42px; flex-shrink: 0;
     border-radius: 50%; border: none;
     color: #fff; font-size: 22px; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: transform 0.15s, box-shadow 0.15s;
   }
-  body.is-pedro .btn-add { background: linear-gradient(135deg, var(--pedro-primary), var(--pedro-accent)); box-shadow: 0 4px 14px rgba(59,95,160,0.35); }
-  body.is-manu  .btn-add { background: linear-gradient(135deg, var(--manu-primary),  var(--manu-accent));  box-shadow: 0 4px 14px rgba(176,80,128,0.35); }
-  .btn-add:hover { transform: scale(1.09); }
-  .btn-add:active { transform: scale(0.94); }
+  body.is-pedro .btn-add { background: var(--p-hue); box-shadow: 0 4px 16px rgba(47,84,150,0.4); }
+  body.is-manu  .btn-add { background: var(--m-hue); box-shadow: 0 4px 16px rgba(158,61,114,0.4); }
+  .btn-add:hover { transform: scale(1.1) rotate(5deg); }
+  .btn-add:active { transform: scale(0.93); }
 
+  .btn-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 18px; border-radius: 24px; border: none;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    white-space: nowrap;
+  }
+  .btn-pill-terra {
+    background: var(--terra); color: #fff;
+    box-shadow: 0 3px 14px rgba(181,97,60,0.35);
+  }
+  .btn-pill-terra:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(181,97,60,0.45); background: #c46840; }
+  .btn-pill-green {
+    background: var(--green); color: #fff;
+    box-shadow: 0 3px 14px rgba(61,122,84,0.3);
+  }
+  .btn-pill-green:hover { transform: translateY(-1px); }
+  .btn-pill-red {
+    background: var(--red); color: #fff;
+    box-shadow: 0 3px 14px rgba(176,58,58,0.3);
+  }
+  .btn-pill-red:hover { transform: translateY(-1px); }
+
+  body.is-pedro .btn-pill-user { background: var(--p-hue); color: #fff; box-shadow: 0 3px 14px rgba(47,84,150,0.35); }
+  body.is-manu  .btn-pill-user { background: var(--m-hue); color: #fff; box-shadow: 0 3px 14px rgba(158,61,114,0.35); }
+
+  /* ══════════════════════════════════════
+     ADD FORMS (tarefas inline)
+  ══════════════════════════════════════ */
+  .add-form { display: flex; gap: 8px; margin-bottom: 10px; }
+  .add-form input, .add-form select,
+  .field-row select, .field-row input {
+    padding: 11px 14px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px; color: var(--ink);
+    background: #fff; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .add-form input { flex: 1; }
+  .add-form input::placeholder, .field-row input::placeholder { color: var(--ink-soft); opacity: 0.7; }
+  body.is-pedro .add-form input:focus,
+  body.is-pedro .add-form select:focus,
+  body.is-pedro .field-row input:focus,
+  body.is-pedro .field-row select:focus {
+    border-color: var(--p-hue);
+    box-shadow: 0 0 0 3px rgba(47,84,150,0.12);
+  }
+  body.is-manu .add-form input:focus,
+  body.is-manu .add-form select:focus,
+  body.is-manu .field-row input:focus,
+  body.is-manu .field-row select:focus {
+    border-color: var(--m-hue);
+    box-shadow: 0 0 0 3px rgba(158,61,114,0.12);
+  }
+  .add-form select { flex: 0; min-width: 100px; cursor: pointer; }
+  .field-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .field-row input, .field-row select { flex: 1; min-width: 140px; }
+
+  /* ══════════════════════════════════════
+     FILTER CHIPS
+  ══════════════════════════════════════ */
+  .filter-row {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 16px;
+  }
+  .chip {
+    padding: 5px 13px; border-radius: 20px;
+    border: 1.5px solid var(--line); background: #fff;
+    color: var(--ink-soft); font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.18s;
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: 0.2px;
+  }
+  .chip:hover { border-color: var(--terra); color: var(--terra); }
+  .chip.active-terra { border-color: var(--terra); background: var(--terra); color: #fff; }
+  .chip.active-green { border-color: var(--green); background: var(--green); color: #fff; }
+  .chip.active-red   { border-color: var(--red);   background: var(--red);   color: #fff; }
+  body.is-pedro .chip.active-user { border-color: var(--p-hue); background: var(--p-hue); color: #fff; }
+  body.is-manu  .chip.active-user { border-color: var(--m-hue); background: var(--m-hue); color: #fff; }
+
+  /* Keep old class names working */
+  .cfilter-btn { padding: 5px 13px; border-radius: 20px; border: 1.5px solid var(--line); background: #fff; color: var(--ink-soft); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.18s; font-family:'Outfit',sans-serif; }
+  .cfilter-btn.active { border-color: var(--green); background: var(--green); color: #fff; }
+  .presentes-filter .cfilter-btn.active { border-color: var(--terra); background: var(--terra); color: #fff; }
+  .subcat-btn { padding: 5px 13px; border-radius: 20px; border: 1.5px solid var(--line); background: #fff; color: var(--ink-soft); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.18s; font-family:'Outfit',sans-serif; display:flex; align-items:center; gap:4px; }
+  .subcat-btn:hover, .subcat-btn.active { border-color: var(--terra); background: var(--terra); color: #fff; }
+  .compras-subcats, .cuidados-filter, .presentes-filter { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+
+  /* ══════════════════════════════════════
+     CARDS — base
+  ══════════════════════════════════════ */
   .list { display: flex; flex-direction: column; gap: 10px; }
+
   .card {
     background: #fff; border-radius: var(--radius);
-    padding: 13px 15px; box-shadow: 0 2px 10px var(--shadow);
-    display: flex; align-items: flex-start; gap: 11px;
-    border-left: 4px solid transparent;
-    transition: transform 0.15s, box-shadow 0.15s;
-    animation: slideIn 0.22s ease;
+    padding: 14px 16px;
+    box-shadow: var(--shadow-card);
+    display: flex; align-items: flex-start; gap: 12px;
+    border-left: 3px solid transparent;
+    transition: transform 0.18s, box-shadow 0.18s;
+    position: relative; overflow: hidden;
+    animation: cardIn 0.24s cubic-bezier(0.22,1,0.36,1) both;
   }
-  @keyframes slideIn { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:translateX(0)} }
-  .card:hover { transform: translateY(-1px); box-shadow: 0 4px 16px var(--shadow); }
-  body.is-pedro .card.accent { border-left-color: var(--pedro-primary); }
-  body.is-manu  .card.accent { border-left-color: var(--manu-primary); }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-raised); }
+  body.is-pedro .card.accent { border-left-color: var(--p-hue); }
+  body.is-manu  .card.accent { border-left-color: var(--m-hue); }
   .card.do   { border-left-color: var(--green); }
-  .card.dont { border-left-color: var(--red-soft); }
-  .card.done-card { opacity: 0.6; }
+  .card.dont { border-left-color: var(--red); }
+  .card.done-card { opacity: 0.55; }
+
   .card-body { flex: 1; min-width: 0; }
+  .card-title {
+    font-size: 15px; font-weight: 600; color: var(--ink);
+    line-height: 1.4; word-break: break-word;
+    margin-bottom: 2px;
+  }
   .card-text {
-    font-size: 15px; font-weight: 500; color: var(--text);
+    font-size: 15px; font-weight: 500; color: var(--ink);
     line-height: 1.4; cursor: text; outline: none;
     border-radius: 4px; padding: 2px 4px; margin: -2px -4px;
     transition: background 0.15s; word-break: break-word;
   }
-  .card-text:focus { background: var(--warm); }
-  .done-card .card-text { text-decoration: line-through; color: var(--text-soft); }
-  .card-meta { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
-  .meta-tag { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; }
-  .meta-status-pendente  { background: #fff3cd; color: #856404; }
-  .meta-status-comprado  { background: var(--green-light); color: var(--green); }
+  .card-text:focus { background: var(--parch-warm); }
+  .card-reason {
+    font-size: 13px; color: var(--ink-soft);
+    line-height: 1.5; margin-top: 5px;
+    font-weight: 400;
+  }
+  .done-card .card-text, .done-card .card-title { text-decoration: line-through; color: var(--ink-soft); }
+
+  .card-meta {
+    display: flex; flex-wrap: wrap; gap: 5px;
+    margin-top: 8px; align-items: center;
+  }
+  .meta-tag {
+    font-size: 11px; font-weight: 500;
+    padding: 2px 8px; border-radius: 20px;
+    font-family: 'Outfit', sans-serif;
+  }
+  .meta-status-pendente  { background: var(--amber-bg); color: var(--amber); }
+  .meta-status-comprado  { background: var(--green-bg);  color: var(--green); }
   .meta-freq { background: #e8eaf6; color: #3949ab; }
-  .meta-dia  { background: #e3f2fd; color: #1565c0; }
+  .meta-dia  { background: #e3f0fd; color: #1565c0; }
+
   .card-link {
-    font-size: 12px; color: var(--rose); text-decoration: none;
+    font-size: 12px; color: var(--terra); text-decoration: none;
     word-break: break-all; display: inline-flex;
     align-items: center; gap: 3px; margin-top: 4px;
+    font-weight: 500;
   }
   .card-link:hover { text-decoration: underline; }
   .card-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+  /* ── action buttons ── */
   .btn-check, .btn-delete {
     width: 30px; height: 30px; border-radius: 50%;
     border: none; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     font-size: 13px; transition: transform 0.15s, background 0.15s;
   }
-  .btn-check { background: var(--green-light); color: var(--green); }
+  .btn-check { background: var(--green-bg); color: var(--green); }
   .btn-check:hover, .btn-check.checked { background: var(--green); color: #fff; }
   .btn-check:hover { transform: scale(1.1); }
-  .btn-delete { background: var(--red-light); color: var(--red-soft); }
-  .btn-delete:hover { background: var(--red-soft); color: #fff; transform: scale(1.1); }
+  .btn-delete { background: var(--red-bg); color: var(--red); }
+  .btn-delete:hover { background: var(--red); color: #fff; transform: scale(1.1); }
+
   .btn-status {
-    font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 20px;
-    border: 1.5px solid currentColor; cursor: pointer; background: none; transition: all 0.15s;
+    font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+    border: 1.5px solid currentColor; cursor: pointer; background: none;
+    transition: all 0.15s; font-family: 'Outfit', sans-serif;
   }
-  .btn-status.pendente { color: #856404; border-color: #856404; }
-  .btn-status.pendente:hover { background: #856404; color: #fff; }
+  .btn-status.pendente { color: var(--amber); border-color: var(--amber); }
+  .btn-status.pendente:hover { background: var(--amber); color: #fff; }
   .btn-status.comprado { color: var(--green); border-color: var(--green); }
   .btn-status.comprado:hover { background: var(--green); color: #fff; }
 
-  .divider { height: 1px; background: linear-gradient(to right,transparent,var(--blush),transparent); margin: 24px 0; }
-
-  .empty { text-align: center; padding: 36px 20px; color: var(--text-soft); }
-  .empty-icon { font-size: 36px; margin-bottom: 10px; }
-  .empty p { font-size: 13px; line-height: 1.6; }
-  .loading { text-align: center; padding: 28px; color: var(--text-soft); font-size: 13px; }
-  .spinner {
-    width: 26px; height: 26px; border-radius: 50%;
-    border: 3px solid var(--blush); border-top-color: var(--rose);
-    animation: spin 0.8s linear infinite; margin: 0 auto 10px;
+  /* ── link button (presente / lar) ── */
+  .link-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 5px 13px; border-radius: 8px;
+    background: var(--terra); color: #fff;
+    font-size: 12px; font-weight: 600;
+    text-decoration: none; transition: background 0.18s, transform 0.15s;
+    white-space: nowrap; flex-shrink: 0; align-self: center;
+    font-family: 'Outfit', sans-serif;
   }
-  @keyframes spin { to{transform:rotate(360deg)} }
+  .link-btn:hover { background: #c46840; transform: translateY(-1px); }
+  .link-btn.no-link { background: var(--parch-warm); color: var(--ink-soft); pointer-events: none; }
+  /* legacy compat */
+  .presente-link-btn { display:inline-flex; align-items:center; gap:4px; padding:5px 13px; border-radius:8px; background:var(--terra); color:#fff; font-size:12px; font-weight:600; text-decoration:none; transition:background .18s; white-space:nowrap; font-family:'Outfit',sans-serif; }
+  .presente-link-btn:hover { background:#c46840; }
+  .lar-link { display:inline-flex; align-items:center; gap:4px; padding:5px 13px; border-radius:8px; background:var(--terra); color:#fff; font-size:12px; font-weight:600; text-decoration:none; transition:background .18s; white-space:nowrap; flex-shrink:0; align-self:center; font-family:'Outfit',sans-serif; }
+  .lar-link:hover { background:#c46840; }
+  .lar-link.no-link { background:var(--parch-warm); color:var(--ink-soft); pointer-events:none; }
 
-  /* ═══════════════════════════════════════
-     MODAL (Settings)
-  ═══════════════════════════════════════ */
-  .modal-backdrop {
-    position: fixed; inset: 0; z-index: 8000;
-    background: rgba(45,31,26,0.55);
-    backdrop-filter: blur(4px);
+  /* ── lar card ── */
+  .lar-card {
+    background: #fff; border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--shadow-card);
+    display: flex; align-items: center; gap: 12px;
+    border-left: 3px solid var(--terra);
+    transition: transform 0.18s, box-shadow 0.18s;
+    animation: cardIn 0.24s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  .lar-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-raised); }
+  .lar-icon {
+    width: 42px; height: 42px; border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
-    padding: 20px;
-    animation: fadeIn 0.2s ease;
+    font-size: 20px; flex-shrink: 0;
   }
-  .modal-backdrop.hidden { display: none; }
-  .modal {
-    background: #fff; border-radius: 24px;
-    width: 100%; max-width: 400px;
-    box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+  .lar-body { flex: 1; min-width: 0; }
+  .lar-body h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lar-meta { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+  .lar-status-pendente  { background: var(--amber-bg); color: var(--amber); }
+  .lar-status-urgente   { background: var(--red-bg);   color: var(--red); }
+  .lar-status-concluido { background: var(--green-bg); color: var(--green); }
+
+  /* ══════════════════════════════════════
+     CATEGORY TAGS
+  ══════════════════════════════════════ */
+  .cat-tag, .pcat-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 700; padding: 2px 8px;
+    border-radius: 20px; margin-bottom: 4px;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    font-family: 'Outfit', sans-serif;
+  }
+  /* cuidados */
+  .cat-doente  { background: #fce4e4; color: #a03030; }
+  .cat-tpm     { background: #ede4f8; color: #6040a0; }
+  .cat-mental  { background: #e4eef8; color: #2860a0; }
+  .cat-fisica  { background: #e4f0e8; color: #2a6040; }
+  /* presentes */
+  .pcat-livros  { background: #e8edf8; color: var(--p-hue); }
+  .pcat-lazer   { background: #e8f8ee; color: var(--green); }
+  .pcat-higiene { background: #f3e8f8; color: #7a3a9a; }
+  .pcat-casa    { background: #fdf4e0; color: var(--amber); }
+
+  /* ══════════════════════════════════════
+     DIVIDER
+  ══════════════════════════════════════ */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--line), transparent);
+    margin: 28px 0;
+  }
+
+  /* ══════════════════════════════════════
+     EMPTY & LOADING
+  ══════════════════════════════════════ */
+  .empty {
+    text-align: center; padding: 48px 20px; color: var(--ink-soft);
+  }
+  .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.7; }
+  .empty p { font-size: 13px; line-height: 1.7; font-weight: 400; }
+  .loading { text-align: center; padding: 32px; color: var(--ink-soft); font-size: 13px; }
+  .spinner {
+    width: 24px; height: 24px; border-radius: 50%;
+    border: 2.5px solid var(--parch-deep); border-top-color: var(--terra);
+    animation: spin 0.7s linear infinite; margin: 0 auto 10px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ══════════════════════════════════════
+     READONLY BANNER
+  ══════════════════════════════════════ */
+  .readonly-banner {
+    display: none; align-items: center; gap: 8px;
+    padding: 9px 14px; border-radius: var(--radius-sm);
+    background: #fffbe8; border: 1.5px solid #f0d060;
+    color: #7a5800; font-size: 12px; font-weight: 500;
+    margin-bottom: 16px; font-family: 'Outfit', sans-serif;
+  }
+  .readonly-banner.visible { display: flex; }
+  body.viewing-other .add-controls { display: none !important; }
+
+  /* ══════════════════════════════════════
+     MODALS — unified
+  ══════════════════════════════════════ */
+  .modal-backdrop,
+  .lar-modal-backdrop,
+  .cuidado-modal-backdrop {
+    position: fixed; inset: 0; z-index: 8000;
+    background: rgba(20,14,10,0.6);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: flex-end; justify-content: center;
+    padding: 0;
+  }
+  @media (min-width: 480px) {
+    .modal-backdrop,
+    .lar-modal-backdrop,
+    .cuidado-modal-backdrop {
+      align-items: center;
+      padding: 20px;
+    }
+  }
+  .modal-backdrop.hidden,
+  .lar-modal-backdrop.hidden,
+  .cuidado-modal-backdrop.hidden { display: none; }
+
+  /* Sheet that slides up on mobile */
+  .modal, .lar-modal {
+    background: #fff;
+    width: 100%; max-width: 480px;
+    box-shadow: var(--shadow-modal);
     overflow: hidden;
-    animation: slideUp 0.25s ease;
+    animation: sheetUp 0.32s cubic-bezier(0.34,1.2,0.64,1) both;
+    max-height: 92vh; overflow-y: auto;
+    /* Mobile: bottom sheet */
+    border-radius: 24px 24px 0 0;
   }
-  @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-  .modal-header {
-    background: linear-gradient(135deg, var(--deep), var(--terra));
-    padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
+  @media (min-width: 480px) {
+    .modal, .lar-modal { border-radius: 24px; }
   }
-  .modal-header h3 {
-    font-family: 'Playfair Display', serif;
-    color: #fff; font-size: 18px;
+  @keyframes sheetUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Modal header */
+  .modal-header, .lar-modal-header {
+    background: linear-gradient(135deg, #1e1510, var(--terra));
+    padding: 18px 22px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 1;
+  }
+  .modal-header h3, .lar-modal-header h3 {
+    font-family: 'Cormorant Garamond', serif;
+    color: #fff; font-size: 19px; font-weight: 600;
+    letter-spacing: 0.3px;
   }
   .modal-close {
-    width: 32px; height: 32px; border-radius: 50%;
-    border: none; background: rgba(255,255,255,0.2);
-    color: #fff; font-size: 18px; cursor: pointer;
+    width: 30px; height: 30px; border-radius: 50%;
+    border: none; background: rgba(255,255,255,0.15);
+    color: #fff; font-size: 16px; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     transition: background 0.15s;
   }
-  .modal-close:hover { background: rgba(255,255,255,0.35); }
-  .modal-body { padding: 20px; }
+  .modal-close:hover { background: rgba(255,255,255,0.3); }
 
-  .settings-section {
-    margin-bottom: 22px;
+  /* Modal body */
+  .modal-body, .lar-modal-body { padding: 22px 22px 24px; }
+
+  /* Form fields inside modals */
+  .lmf { margin-bottom: 14px; }
+  .lmf label {
+    display: block; font-size: 11px; font-weight: 700; color: var(--ink-soft);
+    text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
+    font-family: 'Outfit', sans-serif;
   }
+  .lmf input, .lmf select, .lmf textarea {
+    width: 100%; padding: 11px 14px;
+    border: 1.5px solid var(--line); border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif; font-size: 14px; color: var(--ink);
+    background: var(--parch); outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .lmf input:focus, .lmf select:focus, .lmf textarea:focus {
+    border-color: var(--terra);
+    box-shadow: 0 0 0 3px var(--terra-glow);
+  }
+  .lmf textarea { min-height: 76px; resize: vertical; }
+  .lmf-row { display: flex; gap: 10px; }
+  .lmf-row .lmf { flex: 1; }
+
+  .btn-lm-save {
+    width: 100%; padding: 13px;
+    background: var(--terra);
+    color: #fff; border: none; border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700;
+    cursor: pointer; box-shadow: 0 4px 16px rgba(181,97,60,0.35);
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    margin-top: 6px; letter-spacing: 0.2px;
+  }
+  .btn-lm-save:hover { transform: translateY(-2px); box-shadow: 0 7px 22px rgba(181,97,60,0.45); background: #c46840; }
+
+  /* ── Settings specific ── */
+  .settings-section { margin-bottom: 22px; }
   .settings-section-title {
-    font-size: 11px; font-weight: 700; color: var(--text-soft);
-    text-transform: uppercase; letter-spacing: 0.6px;
+    font-size: 10px; font-weight: 700; color: var(--ink-soft);
+    text-transform: uppercase; letter-spacing: 0.8px;
     margin-bottom: 12px; padding-bottom: 6px;
-    border-bottom: 1px solid var(--warm);
+    border-bottom: 1px solid var(--line);
+    font-family: 'Outfit', sans-serif;
   }
   .settings-user-block {
-    background: var(--cream); border-radius: var(--radius);
+    background: var(--parch); border-radius: var(--radius-sm);
     padding: 14px; margin-bottom: 10px;
-    border: 1.5px solid var(--blush);
+    border: 1.5px solid var(--line);
   }
   .settings-user-block .sub-label {
-    font-size: 12px; font-weight: 700;
-    margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 700; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'Outfit', sans-serif;
   }
-  .sub-label.pedro { color: var(--pedro-primary); }
-  .sub-label.manu  { color: var(--manu-primary);  }
+  .sub-label.pedro { color: var(--p-hue); }
+  .sub-label.manu  { color: var(--m-hue); }
   .settings-field { margin-bottom: 8px; }
   .settings-field label {
     display: block; font-size: 11px; font-weight: 600;
-    color: var(--text-soft); margin-bottom: 4px;
+    color: var(--ink-soft); margin-bottom: 4px;
     text-transform: uppercase; letter-spacing: 0.4px;
+    font-family: 'Outfit', sans-serif;
   }
   .settings-field input {
     width: 100%; padding: 9px 12px;
-    border: 2px solid var(--blush); border-radius: 10px;
-    font-family: 'DM Sans', sans-serif; font-size: 14px;
-    color: var(--text); outline: none; transition: border-color 0.2s;
+    border: 1.5px solid var(--line); border-radius: 8px;
+    font-family: 'Outfit', sans-serif; font-size: 14px;
+    color: var(--ink); outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fff;
   }
-  .settings-field input:focus { border-color: var(--rose); }
+  .settings-field input:focus { border-color: var(--terra); box-shadow: 0 0 0 3px var(--terra-glow); }
   .btn-save-settings {
     width: 100%; padding: 12px;
-    background: linear-gradient(135deg, var(--terra), var(--rose));
-    color: #fff; border: none; border-radius: var(--radius);
-    font-family: 'DM Sans', sans-serif;
+    background: var(--terra);
+    color: #fff; border: none; border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
     font-size: 14px; font-weight: 700; cursor: pointer;
-    box-shadow: 0 4px 14px rgba(201,123,99,0.35);
+    box-shadow: 0 4px 14px rgba(181,97,60,0.35);
     transition: transform 0.15s;
   }
   .btn-save-settings:hover { transform: translateY(-1px); }
-  .settings-msg { font-size: 12px; text-align: center; margin-top: 10px; min-height: 18px; color: var(--green); }
-
-  .modal-divider { height: 1px; background: var(--warm); margin: 4px 0 16px; }
-
+  .settings-msg { font-size: 12px; text-align: center; margin-top: 10px; min-height: 18px; color: var(--green); font-family: 'Outfit', sans-serif; }
+  .modal-divider { height: 1px; background: var(--line); margin: 4px 0 16px; }
   .btn-download-settings {
     width: 100%; padding: 11px;
-    background: var(--cream); border: 1.5px solid var(--blush);
-    border-radius: var(--radius);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px; font-weight: 600; color: var(--text-soft);
+    background: var(--parch); border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px; font-weight: 600; color: var(--ink-soft);
     cursor: pointer; transition: all 0.15s;
     display: flex; align-items: center; justify-content: center; gap: 6px;
   }
-  .btn-download-settings:hover { background: var(--warm); color: var(--text); }
+  .btn-download-settings:hover { background: var(--parch-warm); color: var(--ink); }
 
-  /* TOAST */
+  /* ══════════════════════════════════════
+     TOAST
+  ══════════════════════════════════════ */
   #toast {
-    position: fixed; bottom: 22px; left: 50%;
+    position: fixed; bottom: 24px; left: 50%;
     transform: translateX(-50%) translateY(80px);
-    background: var(--deep); color: #fff;
-    padding: 11px 20px; border-radius: 24px;
+    background: var(--ink); color: #fff;
+    padding: 10px 22px; border-radius: 24px;
     font-size: 13px; font-weight: 500;
-    z-index: 9999; transition: transform 0.3s ease;
+    z-index: 9999; transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1);
     pointer-events: none; white-space: nowrap;
+    font-family: 'Outfit', sans-serif;
+    box-shadow: 0 8px 24px rgba(30,21,16,0.25);
   }
   #toast.show { transform: translateX(-50%) translateY(0); }
 
-  /* ── READ-ONLY MODE ── */
-  .readonly-banner {
-    display: none;
-    align-items: center; gap: 8px;
-    padding: 8px 14px; border-radius: 10px;
-    background: #fff8e1; border: 1.5px solid #ffe082;
-    color: #7a5c00; font-size: 12px; font-weight: 500;
-    margin-bottom: 14px;
-  }
-  .readonly-banner.visible { display: flex; }
-
-  body.viewing-other .add-controls { display: none !important; }
-
+  /* ══════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════ */
   @media (max-width: 420px) {
     .field-row input, .field-row select { min-width: 110px; font-size: 13px; }
     .card-text { font-size: 14px; }
+    .lmf-row { flex-direction: column; gap: 0; }
+    .section-header-row { flex-direction: column; align-items: flex-start; }
   }
 </style>
 </head>
@@ -590,7 +928,7 @@
 <!-- ═══════════════════════════════════════
      MAIN APP (hidden until login)
 ═══════════════════════════════════════ -->
-<div id="app" style="display:none">
+<div id="app">
 
 <header>
   <div class="header-corner left">
@@ -642,22 +980,25 @@
   <!-- PRESENTES -->
   <div class="tab-panel active" id="panel-presentes">
     <div class="user-banner">
-      <span style="font-size:22px">🎁</span>
+      <span style="font-size:24px">🎁</span>
       <div>
         <div class="bname" id="banner-name-presentes">—</div>
-        <div style="font-size:12px;opacity:0.8">Lista de presentes</div>
+        <div class="bsub">Lista de presentes</div>
       </div>
     </div>
     <div class="readonly-banner" id="readonly-presentes">
       👁 Você está visualizando os presentes de <strong id="readonly-name-presentes"></strong>
     </div>
-    <div class="field-row add-controls" id="form-presentes">
-      <input type="text" id="presente-nome" placeholder="Nome do presente..." />
-      <input type="text" id="presente-link" placeholder="Link (opcional)..." />
+    <div class="section-header-row">
+      <h2 class="section-title">🎁 Presentes</h2>
+      <button class="btn-pill btn-pill-terra add-controls" onclick="openPresenteModal()">+ Adicionar</button>
     </div>
-    <div class="add-form add-controls" id="form-presentes-2">
-      <input type="text" id="presente-obs" placeholder="Observação (opcional)..." />
-      <button class="btn-add" onclick="addPresente()" title="Adicionar">+</button>
+    <div class="presentes-filter" id="presentes-filter">
+      <button class="cfilter-btn active" onclick="setPresenteFilter('todos',this)">Todos</button>
+      <button class="cfilter-btn" onclick="setPresenteFilter('Livros',this)">📚 Livros</button>
+      <button class="cfilter-btn" onclick="setPresenteFilter('Lazer',this)">🎮 Lazer</button>
+      <button class="cfilter-btn" onclick="setPresenteFilter('Higiene',this)">🧴 Higiene</button>
+      <button class="cfilter-btn" onclick="setPresenteFilter('Casa',this)">🏠 Casa</button>
     </div>
     <div class="list" id="list-presentes">
       <div class="loading"><div class="spinner"></div>Carregando...</div>
@@ -667,34 +1008,38 @@
   <!-- CUIDADOS -->
   <div class="tab-panel" id="panel-cuidados">
     <div class="user-banner">
-      <span style="font-size:22px">🌿</span>
+      <span style="font-size:24px">🌿</span>
       <div>
         <div class="bname" id="banner-name-cuidados">—</div>
-        <div style="font-size:12px;opacity:0.8">Hábitos e regras</div>
+        <div class="bsub">Hábitos e cuidados</div>
       </div>
     </div>
     <div class="readonly-banner" id="readonly-cuidados">
       👁 Você está visualizando os cuidados de <strong id="readonly-name-cuidados"></strong>
     </div>
-    <h2 class="section-title">✅ O que fazer <span class="badge badge-green">FAZER</span></h2>
-    <div class="add-form add-controls" id="form-fazer">
-      <input type="text" id="input-fazer" placeholder="Ex: Regar as plantas..." />
-      <select id="freq-fazer">
-        <option value="diário">Diário</option>
-        <option value="semanal">Semanal</option>
-        <option value="quinzenal">Quinzenal</option>
-        <option value="mensal">Mensal</option>
-      </select>
-      <button class="btn-add" onclick="addCuidado('fazer')">+</button>
+
+    <!-- O QUE FAZER -->
+    <div class="section-header-row">
+      <h2 class="section-title">✅ O que fazer <span class="badge badge-green">FAZER</span></h2>
+      <button class="btn-pill btn-pill-green add-controls" onclick="openCuidadoModal('fazer')">+ Adicionar</button>
+    </div>
+    <div class="cuidados-filter" id="filter-fazer">
+      <button class="cfilter-btn active" onclick="setCuidadoFilter('fazer','todos',this)">Todos</button>
+      <button class="cfilter-btn" onclick="setCuidadoFilter('fazer','Doente',this)">🤒 Doente</button>
+      <button class="cfilter-btn" onclick="setCuidadoFilter('fazer','TPM',this)">🌙 TPM</button>
+      <button class="cfilter-btn" onclick="setCuidadoFilter('fazer','Cansaço Mental',this)">🧠 Mental</button>
+      <button class="cfilter-btn" onclick="setCuidadoFilter('fazer','Canseira Física',this)">💪 Física</button>
     </div>
     <div class="list" id="list-fazer">
       <div class="loading"><div class="spinner"></div>Carregando...</div>
     </div>
+
     <div class="divider"></div>
-    <h2 class="section-title">❌ O que não fazer <span class="badge badge-red">EVITAR</span></h2>
-    <div class="add-form add-controls" id="form-nao-fazer">
-      <input type="text" id="input-nao-fazer" placeholder="Ex: Deixar louça suja..." />
-      <button class="btn-add" onclick="addCuidado('nao_fazer')">+</button>
+
+    <!-- O QUE NÃO FAZER -->
+    <div class="section-header-row">
+      <h2 class="section-title">❌ O que não fazer <span class="badge badge-red">EVITAR</span></h2>
+      <button class="btn-pill btn-pill-red add-controls" onclick="openCuidadoModal('nao_fazer')">+ Adicionar</button>
     </div>
     <div class="list" id="list-nao-fazer">
       <div class="loading"><div class="spinner"></div>Carregando...</div>
@@ -704,16 +1049,18 @@
   <!-- CASA -->
   <div class="tab-panel" id="panel-tarefas">
     <div class="user-banner">
-      <span style="font-size:22px">🏠</span>
+      <span style="font-size:24px">🏠</span>
       <div>
         <div class="bname" id="banner-name-tarefas">—</div>
-        <div style="font-size:12px;opacity:0.8">Casa</div>
+        <div class="bsub">Organização da casa</div>
       </div>
     </div>
     <div class="readonly-banner" id="readonly-tarefas">
       👁 Você está visualizando a casa de <strong id="readonly-name-tarefas"></strong>
     </div>
-    <h2 class="section-title">🧹 Tarefas <span class="badge badge-blue">FAZER</span></h2>
+    <div class="section-header-row" style="margin-bottom:12px">
+      <h2 class="section-title">🧹 Tarefas <span class="badge badge-blue">FAZER</span></h2>
+    </div>
     <div class="add-form add-controls" id="form-tarefas">
       <input type="text" id="input-tarefa" placeholder="Ex: Lavar roupa..." />
       <button class="btn-add" onclick="addTarefa()">+</button>
@@ -733,20 +1080,146 @@
     <div class="list" id="list-tarefas">
       <div class="loading"><div class="spinner"></div>Carregando...</div>
     </div>
+
     <div class="divider"></div>
-    <h2 class="section-title">🛒 Compras <span class="badge badge-orange">LISTA</span></h2>
-    <div class="add-form add-controls" id="form-compras">
-      <input type="text" id="input-compra" placeholder="Ex: Detergente, arroz..." />
-      <input type="text" id="input-compra-qtd" placeholder="Qtd" style="flex:0;width:72px;" />
-      <button class="btn-add" onclick="addCompra()">+</button>
+
+    <!-- COMPRAS DO LAR -->
+    <div class="section-header-row" style="margin-bottom:12px">
+      <h2 class="section-title">🛒 Compras do Lar <span class="badge badge-orange">LAR</span></h2>
+      <button class="btn-pill btn-pill-terra add-controls" onclick="openLarModal()">+ Cadastrar</button>
     </div>
-    <div class="list" id="list-compras">
+    <div class="compras-subcats" id="lar-subcats">
+      <button class="subcat-btn active" onclick="setLarFilter('todos',this)">🔎 Todos</button>
+      <button class="subcat-btn" onclick="setLarFilter('Compras',this)">🛒 Compras</button>
+      <button class="subcat-btn" onclick="setLarFilter('Lista de Compras',this)">📋 Lista</button>
+      <button class="subcat-btn" onclick="setLarFilter('Eletrodomésticos',this)">🔌 Eletrodomésticos</button>
+      <button class="subcat-btn" onclick="setLarFilter('Enxoval',this)">🛏️ Enxoval</button>
+      <button class="subcat-btn" onclick="setLarFilter('Móveis',this)">🪑 Móveis</button>
+      <button class="subcat-btn" onclick="setLarFilter('Reparos',this)">🔧 Reparos</button>
+    </div>
+    <div class="list" id="list-lar">
       <div class="loading"><div class="spinner"></div>Carregando...</div>
     </div>
   </div>
 
 </div><!-- /content -->
 </div><!-- /app -->
+
+<!-- ═══════════════════════════════════════
+     MODAL: ADICIONAR PRESENTE
+═══════════════════════════════════════ -->
+<div class="lar-modal-backdrop hidden" id="presente-modal-backdrop" onclick="closePresenteModalOutside(event)">
+  <div class="lar-modal">
+    <div class="lar-modal-header">
+      <h3>🎁 Adicionar Presente</h3>
+      <button class="modal-close" onclick="closePresenteModal()">✕</button>
+    </div>
+    <div class="lar-modal-body">
+      <div class="lmf">
+        <label>Nome do presente</label>
+        <input type="text" id="pm-nome" placeholder="Ex: Livro — Sapiens..." />
+      </div>
+      <div class="lmf">
+        <label>Categoria</label>
+        <select id="pm-categoria">
+          <option value="Livros">📚 Livros</option>
+          <option value="Lazer">🎮 Lazer</option>
+          <option value="Higiene">🧴 Higiene</option>
+          <option value="Casa">🏠 Casa</option>
+        </select>
+      </div>
+      <div class="lmf">
+        <label>Link do produto (opcional)</label>
+        <input type="url" id="pm-link" placeholder="https://..." />
+      </div>
+      <div class="lmf">
+        <label>Observação (opcional)</label>
+        <input type="text" id="pm-obs" placeholder="Cor, tamanho, edição..." />
+      </div>
+      <button class="btn-lm-save" onclick="savePresenteModal()">Salvar 🎁</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MODAL: ADICIONAR CUIDADO
+═══════════════════════════════════════ -->
+<div class="cuidado-modal-backdrop hidden" id="cuidado-modal-backdrop" onclick="closeCuidadoModalOutside(event)">
+  <div class="lar-modal">
+    <div class="lar-modal-header">
+      <h3 id="cuidado-modal-title">✅ Adicionar — O que fazer</h3>
+      <button class="modal-close" onclick="closeCuidadoModal()">✕</button>
+    </div>
+    <div class="lar-modal-body">
+      <div class="lmf">
+        <label>Título</label>
+        <input type="text" id="cm-titulo" placeholder="Ex: Tomar um chá quentinho..." />
+      </div>
+      <div class="lmf" id="cm-cat-group">
+        <label>Categoria</label>
+        <select id="cm-categoria">
+          <option value="Doente">🤒 Doente</option>
+          <option value="TPM">🌙 TPM</option>
+          <option value="Cansaço Mental">🧠 Cansaço Mental</option>
+          <option value="Canseira Física">💪 Canseira Física</option>
+        </select>
+      </div>
+      <div class="lmf">
+        <label>Motivo</label>
+        <textarea id="cm-motivo" placeholder="Por que isso ajuda ou deve ser evitado..."></textarea>
+      </div>
+      <button class="btn-lm-save" onclick="saveCuidadoModal()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MODAL: COMPRAS DO LAR
+═══════════════════════════════════════ -->
+<div class="lar-modal-backdrop hidden" id="lar-modal-backdrop" onclick="closeLarModalOutside(event)">
+  <div class="lar-modal">
+    <div class="lar-modal-header">
+      <h3>🛒 Cadastrar Item do Lar</h3>
+      <button class="modal-close" onclick="closeLarModal()">✕</button>
+    </div>
+    <div class="lar-modal-body">
+      <div class="lmf">
+        <label>Nome do item</label>
+        <input type="text" id="lm-nome" placeholder="Ex: Geladeira frost-free..." />
+      </div>
+      <div class="lmf-row">
+        <div class="lmf">
+          <label>Categoria</label>
+          <select id="lm-categoria">
+            <option value="Compras">🛒 Compras</option>
+            <option value="Lista de Compras">📋 Lista de Compras</option>
+            <option value="Eletrodomésticos">🔌 Eletrodomésticos</option>
+            <option value="Enxoval">🛏️ Enxoval</option>
+            <option value="Móveis">🪑 Móveis</option>
+            <option value="Reparos">🔧 Reparos</option>
+          </select>
+        </div>
+        <div class="lmf">
+          <label>Status</label>
+          <select id="lm-status">
+            <option value="pendente">⏳ Pendente</option>
+            <option value="urgente">🔴 Urgente</option>
+            <option value="concluido">✅ Concluído</option>
+          </select>
+        </div>
+      </div>
+      <div class="lmf">
+        <label>Link para compra (opcional)</label>
+        <input type="url" id="lm-link" placeholder="https://..." />
+      </div>
+      <div class="lmf">
+        <label>Observações</label>
+        <textarea id="lm-obs" placeholder="Detalhes, tamanho, cor, quantidade..."></textarea>
+      </div>
+      <button class="btn-lm-save" onclick="saveLarModal()">Salvar</button>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════════════════════════════════
      SETTINGS MODAL
@@ -891,7 +1364,8 @@ async function doLogin() {
     loggedUser  = matched;
     const label = matched === 'pedro' ? 'Pedro' : 'Manu';
     document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
+    const appEl = document.getElementById('app');
+    appEl.classList.add('ready');
     document.getElementById('logged-name').textContent = label;
 
     // Set user view
@@ -905,7 +1379,8 @@ async function doLogin() {
 function doLogout() {
   currentUser = null;
   loggedUser  = null;
-  document.getElementById('app').style.display = 'none';
+  const appEl = document.getElementById('app');
+  appEl.classList.remove('ready');
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('login-user').value = '';
   document.getElementById('login-pass').value = '';
@@ -1007,7 +1482,7 @@ function reloadCurrentTab() {
   const active = document.querySelector('.tab-btn.active')?.dataset?.tab;
   if (active === 'presentes') loadPresentes();
   else if (active === 'cuidados') loadCuidados();
-  else if (active === 'tarefas') { loadTarefas(); loadCompras(); }
+  else if (active === 'tarefas') { loadTarefas(); loadCompras(); loadLar(); }
 }
 
 // ── PRESENTES ─────────────────────────────────────────────────────────
@@ -1019,11 +1494,49 @@ async function loadPresentes() {
     setSyncStatus('connected','sincronizado ✓');
   } catch(e) { setSyncStatus('error','erro de conexão'); }
 }
+let presenteFilter = 'todos';
+const pcatMap = { 'Livros':'pcat-livros','Lazer':'pcat-lazer','Higiene':'pcat-higiene','Casa':'pcat-casa' };
+const pcatEmoji = { 'Livros':'📚','Lazer':'🎮','Higiene':'🧴','Casa':'🏠' };
+
+function setPresenteFilter(cat, btn) {
+  presenteFilter = cat;
+  document.querySelectorAll('#presentes-filter .cfilter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadPresentes();
+}
+
+function openPresenteModal() {
+  document.getElementById('pm-nome').value = '';
+  document.getElementById('pm-link').value = '';
+  document.getElementById('pm-obs').value  = '';
+  document.getElementById('pm-categoria').value = 'Livros';
+  document.getElementById('presente-modal-backdrop').classList.remove('hidden');
+  setTimeout(() => document.getElementById('pm-nome').focus(), 100);
+}
+function closePresenteModal() {
+  document.getElementById('presente-modal-backdrop').classList.add('hidden');
+}
+function closePresenteModalOutside(e) {
+  if (e.target === document.getElementById('presente-modal-backdrop')) closePresenteModal();
+}
+async function savePresenteModal() {
+  const nome = document.getElementById('pm-nome').value.trim();
+  if (!nome) { document.getElementById('pm-nome').focus(); return; }
+  const categoria = document.getElementById('pm-categoria').value;
+  const link = document.getElementById('pm-link').value.trim();
+  const obs  = document.getElementById('pm-obs').value.trim();
+  await fbSet(`${userPath('presentes')}/${genKey()}`, { nome, categoria, link, obs, status:'pendente' });
+  closePresenteModal();
+  showToast('Presente adicionado! 🎁');
+  loadPresentes();
+}
+
 function renderPresentes(data) {
   const list = document.getElementById('list-presentes');
   const canEdit = (currentUser === loggedUser);
-  const keys = Object.keys(data);
-  if (!keys.length) { list.innerHTML = '<div class="empty"><div class="empty-icon">🎁</div><p>Nenhum presente ainda.<br>Adicione o primeiro!</p></div>'; return; }
+  let keys = Object.keys(data);
+  if (presenteFilter !== 'todos') keys = keys.filter(k => data[k].categoria === presenteFilter);
+  if (!keys.length) { list.innerHTML = '<div class="empty"><div class="empty-icon">🎁</div><p>Nenhum presente aqui ainda.<br>Adicione o primeiro!</p></div>'; return; }
   keys.sort((a,b) => (data[a].status==='comprado'?1:0)-(data[b].status==='comprado'?1:0));
   list.innerHTML = '';
   keys.forEach(k => {
@@ -1031,14 +1544,18 @@ function renderPresentes(data) {
     const path = `${userPath('presentes')}/${k}`;
     const card = document.createElement('div');
     card.className = `card accent${p.status==='comprado'?' done-card':''}`;
+    const catCls   = pcatMap[p.categoria]   || '';
+    const catEm    = pcatEmoji[p.categoria] || '🎁';
     card.innerHTML = `
       <div class="card-body">
-        <div class="card-text" ${canEdit ? `contenteditable="true" onblur="editField('${path}/nome',this.textContent)"` : ''}>${esc(p.nome)}</div>
-        ${p.link ? `<a class="card-link" href="${esc(p.link)}" target="_blank">🔗 ver produto</a>` : ''}
-        ${p.obs  ? `<div style="font-size:12px;color:var(--text-soft);margin-top:4px">💬 ${esc(p.obs)}</div>` : ''}
+        ${p.categoria ? `<span class="pcat-tag ${catCls}">${catEm} ${esc(p.categoria)}</span>` : ''}
+        <div class="card-title" ${canEdit ? `contenteditable="true" onblur="editField('${path}/nome',this.textContent)"` : ''}>${esc(p.nome)}</div>
+        ${p.obs ? `<div class="card-reason">💬 ${esc(p.obs)}</div>` : ''}
         <div class="card-meta">
-          ${canEdit ? `<button class="btn-status ${p.status}" onclick="togglePresente('${k}')">${p.status==='comprado'?'✓ comprado':'⏳ pendente'}</button>`
-                    : `<span class="meta-tag ${p.status==='comprado'?'meta-status-comprado':'meta-status-pendente'}">${p.status==='comprado'?'✓ comprado':'⏳ pendente'}</span>`}
+          ${canEdit
+            ? `<button class="btn-status ${p.status}" onclick="togglePresente('${k}')">${p.status==='comprado'?'✓ comprado':'⏳ pendente'}</button>`
+            : `<span class="meta-tag ${p.status==='comprado'?'meta-status-comprado':'meta-status-pendente'}">${p.status==='comprado'?'✓ comprado':'⏳ pendente'}</span>`}
+          ${p.link ? `<a class="presente-link-btn" href="${esc(p.link)}" target="_blank" rel="noopener">🔗 Ver produto</a>` : ''}
         </div>
       </div>
       ${canEdit ? `<div class="card-actions"><button class="btn-delete" onclick="deleteItem('${path}',loadPresentes)">🗑</button></div>` : ''}`;
@@ -1046,13 +1563,7 @@ function renderPresentes(data) {
   });
 }
 async function addPresente() {
-  const nome = document.getElementById('presente-nome').value.trim();
-  if (!nome) { document.getElementById('presente-nome').focus(); return; }
-  const link = document.getElementById('presente-link').value.trim();
-  const obs  = document.getElementById('presente-obs').value.trim();
-  await fbSet(`${userPath('presentes')}/${genKey()}`, { nome, link, obs, status:'pendente' });
-  ['presente-nome','presente-link','presente-obs'].forEach(id => document.getElementById(id).value='');
-  showToast('Presente adicionado! 🎁'); loadPresentes();
+  // legacy — now handled by modal
 }
 async function togglePresente(key) {
   try {
@@ -1065,6 +1576,11 @@ async function togglePresente(key) {
 }
 
 // ── CUIDADOS ──────────────────────────────────────────────────────────
+let cuidadoFilterFazer = 'todos';
+let cuidadoModalTipo = 'fazer';
+const catTagMap = { 'Doente':'cat-doente','TPM':'cat-tpm','Cansaço Mental':'cat-mental','Canseira Física':'cat-fisica' };
+const catEmoji = { 'Doente':'🤒','TPM':'🌙','Cansaço Mental':'🧠','Canseira Física':'💪' };
+
 async function loadCuidados() {
   ['list-fazer','list-nao-fazer'].forEach(id => {
     document.getElementById(id).innerHTML = '<div class="loading"><div class="spinner"></div>Carregando...</div>';
@@ -1079,14 +1595,31 @@ async function loadCuidados() {
     setSyncStatus('connected','sincronizado ✓');
   } catch(e) { setSyncStatus('error','erro de conexão'); }
 }
+
+function setCuidadoFilter(tipo, cat, btn) {
+  if (tipo === 'fazer') {
+    cuidadoFilterFazer = cat;
+    document.querySelectorAll('#filter-fazer .cfilter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // Re-render with existing data — trigger a quick reload
+    loadCuidados();
+  }
+}
+
 function renderCuidados(tipo, data) {
   const listId = tipo==='fazer' ? 'list-fazer' : 'list-nao-fazer';
   const list = document.getElementById(listId);
   const canEdit = (currentUser === loggedUser);
-  const keys = Object.keys(data);
+  let keys = Object.keys(data);
+
+  // Apply category filter for "fazer"
+  if (tipo === 'fazer' && cuidadoFilterFazer !== 'todos') {
+    keys = keys.filter(k => data[k].categoria === cuidadoFilterFazer);
+  }
+
   const cls = tipo==='fazer' ? 'do' : 'dont';
   if (!keys.length) {
-    list.innerHTML = `<div class="empty"><div class="empty-icon">${tipo==='fazer'?'🌱':'🚫'}</div><p>${tipo==='fazer'?'Adicione bons hábitos!':'O que devemos evitar?'}</p></div>`;
+    list.innerHTML = `<div class="empty"><div class="empty-icon">${tipo==='fazer'?'🌱':'🚫'}</div><p>${tipo==='fazer'?'Adicione bons cuidados!':'O que devemos evitar?'}</p></div>`;
     return;
   }
   list.innerHTML = '';
@@ -1095,26 +1628,45 @@ function renderCuidados(tipo, data) {
     const path = `${userPath(`cuidados_${tipo}`)}/${k}`;
     const card = document.createElement('div');
     card.className = `card ${cls}`;
+    const catClass = catTagMap[item.categoria] || '';
+    const catLabel = item.categoria ? `<span class="cat-tag ${catClass}">${catEmoji[item.categoria]||''} ${esc(item.categoria)}</span>` : '';
     card.innerHTML = `
       <div class="card-body">
-        <div class="card-text" ${canEdit ? `contenteditable="true" onblur="editField('${path}/descricao',this.textContent)"` : ''}>${esc(item.descricao)}</div>
-        <div class="card-meta">
-          ${item.frequencia ? `<span class="meta-tag meta-freq">🔄 ${esc(item.frequencia)}</span>` : ''}
-        </div>
+        ${catLabel}
+        <div class="card-title">${esc(item.titulo||item.descricao||'')}</div>
+        ${item.motivo ? `<div class="card-reason">${esc(item.motivo)}</div>` : ''}
+        ${item.frequencia ? `<div class="card-meta"><span class="meta-tag meta-freq">🔄 ${esc(item.frequencia)}</span></div>` : ''}
       </div>
       ${canEdit ? `<div class="card-actions"><button class="btn-delete" onclick="deleteItem('${path}',loadCuidados)">🗑</button></div>` : ''}`;
     list.appendChild(card);
   });
 }
-async function addCuidado(tipo) {
-  const inputId = tipo==='fazer' ? 'input-fazer' : 'input-nao-fazer';
-  const desc = document.getElementById(inputId).value.trim();
-  if (!desc) { document.getElementById(inputId).focus(); return; }
-  const obj = { descricao: desc };
-  if (tipo==='fazer') obj.frequencia = document.getElementById('freq-fazer').value;
-  await fbSet(`${userPath(`cuidados_${tipo}`)}/${genKey()}`, obj);
-  document.getElementById(inputId).value = '';
-  showToast(tipo==='fazer' ? 'Hábito adicionado! ✅' : 'Adicionado à lista! 🚫');
+
+// ── CUIDADO MODAL ─────────────────────────────────────────────────────
+function openCuidadoModal(tipo) {
+  cuidadoModalTipo = tipo;
+  document.getElementById('cuidado-modal-title').textContent =
+    tipo === 'fazer' ? '✅ Adicionar — O que fazer' : '🚫 Adicionar — O que não fazer';
+  document.getElementById('cm-cat-group').style.display = tipo === 'fazer' ? '' : 'none';
+  document.getElementById('cm-titulo').value = '';
+  document.getElementById('cm-motivo').value = '';
+  document.getElementById('cuidado-modal-backdrop').classList.remove('hidden');
+}
+function closeCuidadoModal() {
+  document.getElementById('cuidado-modal-backdrop').classList.add('hidden');
+}
+function closeCuidadoModalOutside(e) {
+  if (e.target === document.getElementById('cuidado-modal-backdrop')) closeCuidadoModal();
+}
+async function saveCuidadoModal() {
+  const titulo = document.getElementById('cm-titulo').value.trim();
+  const motivo = document.getElementById('cm-motivo').value.trim();
+  if (!titulo) { document.getElementById('cm-titulo').focus(); return; }
+  const obj = { titulo, motivo };
+  if (cuidadoModalTipo === 'fazer') obj.categoria = document.getElementById('cm-categoria').value;
+  await fbSet(`${userPath(`cuidados_${cuidadoModalTipo}`)}/${genKey()}`, obj);
+  closeCuidadoModal();
+  showToast(cuidadoModalTipo==='fazer' ? 'Cuidado adicionado! ✅' : 'Adicionado à lista! 🚫');
   loadCuidados();
 }
 
@@ -1171,54 +1723,113 @@ async function toggleTarefa(key, done) {
   showToast(done ? 'Feito! 🎉' : 'Desmarcada'); loadTarefas();
 }
 
-// ── COMPRAS ───────────────────────────────────────────────────────────
+// ── COMPRAS (lista simples - mantida) ────────────────────────────────
 async function loadCompras() {
-  document.getElementById('list-compras').innerHTML = '<div class="loading"><div class="spinner"></div>Carregando...</div>';
+  // kept for legacy tab reload compatibility — now absorbed by loadLar
+}
+function renderCompras(data) {}
+async function addCompra() {}
+async function toggleCompra(key, done) {}
+
+// ── COMPRAS DO LAR ────────────────────────────────────────────────────
+let larFilter = 'todos';
+const larIcoMap = {
+  'Compras':'🛒','Lista de Compras':'📋','Eletrodomésticos':'🔌',
+  'Enxoval':'🛏️','Móveis':'🪑','Reparos':'🔧'
+};
+const larIcoBg = {
+  'Compras':'#fce8d8','Lista de Compras':'#e8edf8','Eletrodomésticos':'#e8f8e8',
+  'Enxoval':'#f4e8f8','Móveis':'#fdf4e0','Reparos':'#fce8e8'
+};
+
+async function loadLar() {
+  const el = document.getElementById('list-lar');
+  if (!el) return;
+  el.innerHTML = '<div class="loading"><div class="spinner"></div>Carregando...</div>';
   try {
-    const data = await fbGet(userPath('compras'));
-    renderCompras(data||{});
+    const data = await fbGet(userPath('compras_lar'));
+    renderLar(data||{});
     setSyncStatus('connected','sincronizado ✓');
   } catch(e) { setSyncStatus('error','erro de conexão'); }
 }
-function renderCompras(data) {
-  const list = document.getElementById('list-compras');
+
+function setLarFilter(cat, btn) {
+  larFilter = cat;
+  document.querySelectorAll('#lar-subcats .subcat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadLar();
+}
+
+function renderLar(data) {
+  const list = document.getElementById('list-lar');
+  if (!list) return;
   const canEdit = (currentUser === loggedUser);
-  const keys = Object.keys(data);
-  if (!keys.length) { list.innerHTML = '<div class="empty"><div class="empty-icon">🛒</div><p>Lista de compras vazia!</p></div>'; return; }
-  keys.sort((a,b) => (data[a].comprado?1:0)-(data[b].comprado?1:0));
+  let keys = Object.keys(data);
+  if (larFilter !== 'todos') keys = keys.filter(k => data[k].categoria === larFilter);
+  if (!keys.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">🛒</div><p>Nenhum item nesta categoria.</p></div>';
+    return;
+  }
+  const statusLabel = { pendente:'⏳ Pendente', urgente:'🔴 Urgente', concluido:'✅ Concluído' };
+  const statusClass = { pendente:'lar-status-pendente', urgente:'lar-status-urgente', concluido:'lar-status-concluido' };
   list.innerHTML = '';
   keys.forEach(k => {
-    const c = data[k];
-    const path = `${userPath('compras')}/${k}`;
+    const item = data[k];
+    const path = `${userPath('compras_lar')}/${k}`;
     const card = document.createElement('div');
-    card.className = `card accent${c.comprado?' done-card':''}`;
+    card.className = 'lar-card';
+    const ico = larIcoMap[item.categoria] || '📦';
+    const bg  = larIcoBg[item.categoria]  || '#f0f0f0';
     card.innerHTML = `
-      <div class="card-body">
-        <div class="card-text" ${canEdit ? `contenteditable="true" onblur="editField('${path}/item',this.textContent)"` : ''}>${esc(c.item)}</div>
-        <div class="card-meta">
-          ${c.qtd ? `<span class="meta-tag meta-freq">📦 ${esc(c.qtd)}</span>` : ''}
-          <span class="meta-tag ${c.comprado?'meta-status-comprado':'meta-status-pendente'}">${c.comprado?'✓ comprado':'⏳ falta'}</span>
+      <div class="lar-icon" style="background:${bg}">${ico}</div>
+      <div class="lar-body">
+        <h4>${esc(item.nome)}</h4>
+        <div class="lar-meta">
+          <span class="meta-tag" style="background:#f0f0f0;color:#555">${esc(item.categoria)}</span>
+          <span class="meta-tag ${statusClass[item.status]||'lar-status-pendente'}">${statusLabel[item.status]||item.status}</span>
+          ${item.obs ? `<span class="meta-tag" style="background:#f9f6f0;color:var(--text-soft);font-style:italic">${esc(item.obs.substring(0,50))}${item.obs.length>50?'…':''}</span>` : ''}
         </div>
       </div>
-      ${canEdit ? `<div class="card-actions">
-        <button class="btn-check${c.comprado?' checked':''}" onclick="toggleCompra('${k}',${!c.comprado})">✓</button>
-        <button class="btn-delete" onclick="deleteItem('${path}',loadCompras)">🗑</button>
-      </div>` : ''}`;
+      ${item.link
+        ? `<a class="lar-link" href="${esc(item.link)}" target="_blank" rel="noopener">🔗 Ver produto</a>`
+        : `<span class="lar-link no-link">—</span>`}
+      ${canEdit ? `<button class="btn-delete" style="margin-left:4px" onclick="deleteLar('${path}')">🗑</button>` : ''}`;
     list.appendChild(card);
   });
 }
-async function addCompra() {
-  const item = document.getElementById('input-compra').value.trim();
-  if (!item) { document.getElementById('input-compra').focus(); return; }
-  const qtd = document.getElementById('input-compra-qtd').value.trim();
-  await fbSet(`${userPath('compras')}/${genKey()}`, { item, qtd, comprado: false });
-  document.getElementById('input-compra').value = '';
-  document.getElementById('input-compra-qtd').value = '';
-  showToast('Item adicionado! 🛒'); loadCompras();
+
+function openLarModal() {
+  document.getElementById('lm-nome').value = '';
+  document.getElementById('lm-link').value = '';
+  document.getElementById('lm-obs').value = '';
+  document.getElementById('lm-status').value = 'pendente';
+  document.getElementById('lar-modal-backdrop').classList.remove('hidden');
 }
-async function toggleCompra(key, done) {
-  await fbSet(`${userPath('compras')}/${key}/comprado`, done);
-  showToast(done ? 'Comprado! ✓' : 'Desmarcado'); loadCompras();
+function closeLarModal() {
+  document.getElementById('lar-modal-backdrop').classList.add('hidden');
+}
+function closeLarModalOutside(e) {
+  if (e.target === document.getElementById('lar-modal-backdrop')) closeLarModal();
+}
+async function saveLarModal() {
+  const nome = document.getElementById('lm-nome').value.trim();
+  if (!nome) { document.getElementById('lm-nome').focus(); return; }
+  const obj = {
+    nome,
+    categoria: document.getElementById('lm-categoria').value,
+    status: document.getElementById('lm-status').value,
+    link: document.getElementById('lm-link').value.trim(),
+    obs: document.getElementById('lm-obs').value.trim()
+  };
+  await fbSet(`${userPath('compras_lar')}/${genKey()}`, obj);
+  closeLarModal();
+  showToast('Item cadastrado! 🛒');
+  loadLar();
+}
+async function deleteLar(path) {
+  await fbDelete(path);
+  showToast('Removido 🗑');
+  loadLar();
 }
 
 // ── GENERICS ──────────────────────────────────────────────────────────
@@ -1245,17 +1856,15 @@ function downloadApp() {
   showToast('Download iniciado! 💾');
 }
 
-// ── POLLING ───────────────────────────────────────────────────────────
-setInterval(() => { if (currentUser) reloadCurrentTab(); }, 15000);
+// ── POLLING: silent background refresh every 30 minutes ───────────────
+setInterval(() => { if (currentUser) reloadCurrentTab(); }, 30 * 60 * 1000);
 
 // ── ENTER SHORTCUTS ───────────────────────────────────────────────────
-['presente-nome','presente-link','presente-obs'].forEach(id =>
-  document.getElementById(id)?.addEventListener('keydown', e => { if(e.key==='Enter') addPresente(); }));
-document.getElementById('input-fazer').addEventListener('keydown', e => { if(e.key==='Enter') addCuidado('fazer'); });
-document.getElementById('input-nao-fazer').addEventListener('keydown', e => { if(e.key==='Enter') addCuidado('nao_fazer'); });
 document.getElementById('input-tarefa').addEventListener('keydown', e => { if(e.key==='Enter') addTarefa(); });
-document.getElementById('input-compra').addEventListener('keydown', e => { if(e.key==='Enter') addCompra(); });
-document.getElementById('input-compra-qtd').addEventListener('keydown', e => { if(e.key==='Enter') addCompra(); });
+document.getElementById('pm-nome')?.addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('pm-link').focus(); });
+document.getElementById('pm-link')?.addEventListener('keydown', e => { if(e.key==='Enter') savePresenteModal(); });
+document.getElementById('cm-titulo')?.addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('cm-motivo').focus(); });
+document.getElementById('lm-nome')?.addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('lm-link').focus(); });
 </script>
 </body>
 </html>

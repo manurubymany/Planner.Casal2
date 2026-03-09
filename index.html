@@ -1760,7 +1760,20 @@ async function saveCuidadoModal() {
 async function loadTarefas() {
   document.getElementById('list-tarefas').innerHTML = '<div class="loading"><div class="spinner"></div>Carregando...</div>';
   try {
-    const data = await fbGet('casa/tarefas_casa');
+    // Try shared path first
+    let data = await fbGet('casa/tarefas_casa');
+    // If empty, migrate from pedro/ and manu/
+    if (!data || Object.keys(data).length === 0) {
+      const [dp, dm] = await Promise.all([
+        fbGet('pedro/tarefas_casa').catch(()=>null),
+        fbGet('manu/tarefas_casa').catch(()=>null)
+      ]);
+      const merged = Object.assign({}, dp||{}, dm||{});
+      if (Object.keys(merged).length > 0) {
+        await fbSet('casa/tarefas_casa', merged);
+        data = merged;
+      }
+    }
     renderTarefas(data||{});
     setSyncStatus('connected','sincronizado ✓');
   } catch(e) { setSyncStatus('error','erro de conexão'); }
@@ -1833,7 +1846,20 @@ async function loadLar() {
   if (!el) return;
   el.innerHTML = '<div class="loading"><div class="spinner"></div>Carregando...</div>';
   try {
-    const data = await fbGet('casa/compras_lar');
+    // Try shared path first
+    let data = await fbGet('casa/compras_lar');
+    // If empty, migrate from pedro/ and manu/
+    if (!data || Object.keys(data).length === 0) {
+      const [dp, dm] = await Promise.all([
+        fbGet('pedro/compras_lar').catch(()=>null),
+        fbGet('manu/compras_lar').catch(()=>null)
+      ]);
+      const merged = Object.assign({}, dp||{}, dm||{});
+      if (Object.keys(merged).length > 0) {
+        await fbSet('casa/compras_lar', merged);
+        data = merged;
+      }
+    }
     renderLar(data||{});
     setSyncStatus('connected','sincronizado ✓');
   } catch(e) { setSyncStatus('error','erro de conexão'); }

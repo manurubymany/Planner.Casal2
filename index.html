@@ -711,7 +711,9 @@
     margin-bottom: 16px; font-family: 'Outfit', sans-serif;
   }
   .readonly-banner.visible { display: flex; }
-  body.viewing-other .add-controls { display: none !important; }
+  /* viewing-other hides controls only on presentes & cuidados, NOT casa (shared) */
+  body.viewing-other #panel-presentes .add-controls { display: none !important; }
+  body.viewing-other #panel-cuidados  .add-controls { display: none !important; }
 
   /* ══════════════════════════════════════
      MODALS — unified
@@ -898,7 +900,78 @@
     .lmf-row { flex-direction: column; gap: 0; }
     .section-header-row { flex-direction: column; align-items: flex-start; }
   }
+
+  /* ── PWA INSTALL BUTTON ── */
+  #btn-pwa-install {
+    display: none;
+    align-items: center; gap: 7px;
+    margin-top: 10px; padding: 8px 20px;
+    background: rgba(255,255,255,0.18);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    border-radius: 24px;
+    color: #fff; font-family: 'Outfit', sans-serif;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    animation: installPulse 2.8s ease-in-out infinite;
+  }
+  #btn-pwa-install.visible { display: inline-flex; }
+  #btn-pwa-install:hover { background: rgba(255,255,255,0.3); transform: translateY(-1px); }
+  @keyframes installPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.25); }
+    50%      { box-shadow: 0 0 0 7px rgba(255,255,255,0); }
+  }
+
+  /* ── iOS BANNER ── */
+  #ios-install-banner {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 9500;
+    background: #fff;
+    border-top: 1px solid var(--line);
+    border-radius: 24px 24px 0 0;
+    padding: 18px 20px calc(env(safe-area-inset-bottom,0px) + 20px);
+    box-shadow: 0 -8px 40px rgba(30,21,16,0.18);
+    font-family: 'Outfit', sans-serif;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.34,1.2,0.64,1);
+  }
+  #ios-install-banner.show { transform: translateY(0); }
+  .ios-banner-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .ios-banner-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 600; color: var(--ink);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ios-banner-close {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: none; background: var(--parch-warm);
+    color: var(--ink-soft); font-size: 14px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ios-steps { display: flex; flex-direction: column; gap: 8px; }
+  .ios-step {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px; border-radius: 12px;
+    background: var(--parch); font-size: 13px; color: var(--ink); font-weight: 500;
+  }
+  .ios-step-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--terra); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+  }
+  .ios-step em { font-style: normal; font-weight: 700; color: var(--terra); }
 </style>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pedro & Manu">
+<meta name="theme-color" content="#1e1510">
+<link id="pwa-manifest-link" rel="manifest" href="#">
 </head>
 <body class="is-pedro">
 
@@ -948,8 +1021,23 @@
     <div id="sync-dot"></div>
     <span id="sync-text">conectando...</span>
   </div>
-  <button id="btn-download" onclick="downloadApp()">⬇ Salvar no dispositivo</button>
+  <button id="btn-pwa-install" onclick="triggerPWAInstall()">⬇ Instalar App</button>
 </header>
+
+<!-- ═══════════════════════════════════════
+     iOS INSTALL BANNER
+═══════════════════════════════════════ -->
+<div id="ios-install-banner">
+  <div class="ios-banner-top">
+    <div class="ios-banner-title">📲 Instalar no iPhone / iPad</div>
+    <button class="ios-banner-close" onclick="closeIOSBanner()">✕</button>
+  </div>
+  <div class="ios-steps">
+    <div class="ios-step"><span class="ios-step-num">1</span>Toque no ícone <em>Compartilhar</em> (□↑) na barra do Safari</div>
+    <div class="ios-step"><span class="ios-step-num">2</span>Role a lista e toque em <em>"Adicionar à Tela de Início"</em></div>
+    <div class="ios-step"><span class="ios-step-num">3</span>Confirme tocando em <em>Adicionar</em> no canto superior direito</div>
+  </div>
+</div>
 
 <!-- USER SELECTOR -->
 <div class="user-bar">
@@ -1048,15 +1136,13 @@
 
   <!-- CASA -->
   <div class="tab-panel" id="panel-tarefas">
-    <div class="user-banner">
+    <div class="shared-banner">
       <span style="font-size:24px">🏠</span>
       <div>
-        <div class="bname" id="banner-name-tarefas">—</div>
-        <div class="bsub">Organização da casa</div>
+        <div class="shared-banner-title">Nossa Casa</div>
+        <div class="shared-banner-sub">Pedro &amp; Manu — espaço compartilhado</div>
       </div>
-    </div>
-    <div class="readonly-banner" id="readonly-tarefas">
-      👁 Você está visualizando a casa de <strong id="readonly-name-tarefas"></strong>
+      <span class="shared-badge">Compartilhado</span>
     </div>
     <div class="section-header-row" style="margin-bottom:12px">
       <h2 class="section-title">🧹 Tarefas <span class="badge badge-blue">FAZER</span></h2>
@@ -1267,7 +1353,7 @@
 
       <div class="settings-section" style="margin-bottom:0">
         <div class="settings-section-title">App</div>
-        <button class="btn-download-settings" onclick="downloadApp()">⬇ Salvar app no dispositivo</button>
+        <button class="btn-download-settings" onclick="triggerPWAInstall()">📲 Instalar App no Dispositivo</button>
       </div>
 
     </div>
@@ -1454,7 +1540,7 @@ function selectUser(user) {
   document.getElementById('ubtn-manu').classList.toggle('active', user === 'manu');
   document.getElementById('logged-name').textContent = loggedUser === 'pedro' ? 'Pedro' : 'Manu';
 
-  ['presentes','cuidados','tarefas'].forEach(s => {
+  ['presentes','cuidados'].forEach(s => {
     const el = document.getElementById(`banner-name-${s}`);
     if (el) el.textContent = label;
 
@@ -1674,14 +1760,14 @@ async function saveCuidadoModal() {
 async function loadTarefas() {
   document.getElementById('list-tarefas').innerHTML = '<div class="loading"><div class="spinner"></div>Carregando...</div>';
   try {
-    const data = await fbGet(userPath('tarefas_casa'));
+    const data = await fbGet('casa/tarefas_casa');
     renderTarefas(data||{});
     setSyncStatus('connected','sincronizado ✓');
   } catch(e) { setSyncStatus('error','erro de conexão'); }
 }
 function renderTarefas(data) {
   const list = document.getElementById('list-tarefas');
-  const canEdit = (currentUser === loggedUser);
+  const canEdit = (loggedUser !== null);
   const keys = Object.keys(data);
   if (!keys.length) { list.innerHTML = '<div class="empty"><div class="empty-icon">🧹</div><p>Nenhuma tarefa ainda.</p></div>'; return; }
   const diasOrder = ['segunda','terça','quarta','quinta','sexta','sábado','domingo',''];
@@ -1692,7 +1778,7 @@ function renderTarefas(data) {
   list.innerHTML = '';
   keys.forEach(k => {
     const t = data[k];
-    const path = `${userPath('tarefas_casa')}/${k}`;
+    const path = `casa/tarefas_casa/${k}`;
     const card = document.createElement('div');
     card.className = `card accent${t.concluido?' done-card':''}`;
     card.innerHTML = `
@@ -1714,12 +1800,12 @@ async function addTarefa() {
   const tarefa = document.getElementById('input-tarefa').value.trim();
   if (!tarefa) { document.getElementById('input-tarefa').focus(); return; }
   const dia = document.getElementById('tarefa-dia').value;
-  await fbSet(`${userPath('tarefas_casa')}/${genKey()}`, { tarefa, dia_semana: dia, concluido: false });
+  await fbSet(`casa/tarefas_casa/${genKey()}`, { tarefa, dia_semana: dia, concluido: false });
   document.getElementById('input-tarefa').value = '';
   showToast('Tarefa adicionada! 🧹'); loadTarefas();
 }
 async function toggleTarefa(key, done) {
-  await fbSet(`${userPath('tarefas_casa')}/${key}/concluido`, done);
+  await fbSet(`casa/tarefas_casa/${key}/concluido`, done);
   showToast(done ? 'Feito! 🎉' : 'Desmarcada'); loadTarefas();
 }
 
@@ -1747,7 +1833,7 @@ async function loadLar() {
   if (!el) return;
   el.innerHTML = '<div class="loading"><div class="spinner"></div>Carregando...</div>';
   try {
-    const data = await fbGet(userPath('compras_lar'));
+    const data = await fbGet('casa/compras_lar');
     renderLar(data||{});
     setSyncStatus('connected','sincronizado ✓');
   } catch(e) { setSyncStatus('error','erro de conexão'); }
@@ -1763,7 +1849,7 @@ function setLarFilter(cat, btn) {
 function renderLar(data) {
   const list = document.getElementById('list-lar');
   if (!list) return;
-  const canEdit = (currentUser === loggedUser);
+  const canEdit = (loggedUser !== null);
   let keys = Object.keys(data);
   if (larFilter !== 'todos') keys = keys.filter(k => data[k].categoria === larFilter);
   if (!keys.length) {
@@ -1775,7 +1861,7 @@ function renderLar(data) {
   list.innerHTML = '';
   keys.forEach(k => {
     const item = data[k];
-    const path = `${userPath('compras_lar')}/${k}`;
+    const path = `casa/compras_lar/${k}`;
     const card = document.createElement('div');
     card.className = 'lar-card';
     const ico = larIcoMap[item.categoria] || '📦';
@@ -1821,7 +1907,7 @@ async function saveLarModal() {
     link: document.getElementById('lm-link').value.trim(),
     obs: document.getElementById('lm-obs').value.trim()
   };
-  await fbSet(`${userPath('compras_lar')}/${genKey()}`, obj);
+  await fbSet(`casa/compras_lar/${genKey()}`, obj);
   closeLarModal();
   showToast('Item cadastrado! 🛒');
   loadLar();
@@ -1844,17 +1930,118 @@ async function deleteItem(path, reloadFn) {
   showToast('Removido 🗑'); reloadFn();
 }
 
-// ── DOWNLOAD ──────────────────────────────────────────────────────────
-function downloadApp() {
-  const html = document.documentElement.outerHTML;
-  const blob = new Blob([html], { type:'text/html;charset=utf-8' });
+// ── PWA: Manifest inline ──────────────────────────────────────────────
+(function injectManifest() {
+  const manifest = {
+    name: "Pedro & Manu ♡",
+    short_name: "Pedro & Manu",
+    description: "Nosso cantinho organizado",
+    start_url: "./",
+    display: "standalone",
+    orientation: "portrait",
+    theme_color: "#1e1510",
+    background_color: "#faf6f0",
+    icons: [
+      {
+        src: "data:image/svg+xml," + encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%231e1510'/><path d='M256 360 L130 234 a90 90 0 0 1 126-126l0 0a90 90 0 0 1 126 126Z' fill='%23b5613c'/><circle cx='256' cy='200' r='30' fill='rgba(255,255,255,0.2)'/></svg>`),
+        sizes: "512x512",
+        type: "image/svg+xml",
+        purpose: "any maskable"
+      }
+    ],
+    screenshots: [],
+    categories: ["lifestyle", "productivity"]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], {type: 'application/manifest+json'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'planner-pedro-manu.html';
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a); URL.revokeObjectURL(url);
-  showToast('Download iniciado! 💾');
+  const link = document.getElementById('pwa-manifest-link');
+  if (link) link.href = url;
+})();
+
+// ── PWA: Service Worker ───────────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'pedro-manu-v1';
+    const FONTS = [
+      'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600;700&display=swap'
+    ];
+    self.addEventListener('install', e => {
+      e.waitUntil(
+        caches.open(CACHE).then(c => c.addAll(FONTS).catch(()=>{}))
+      );
+      self.skipWaiting();
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(caches.keys().then(keys =>
+        Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+      ));
+      self.clients.claim();
+    });
+    self.addEventListener('fetch', e => {
+      if (e.request.url.includes('firebaseio.com')) return; // never cache Firebase
+      e.respondWith(
+        caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => cached))
+      );
+    });
+  `;
+  const swBlob = new Blob([swCode], {type: 'application/javascript'});
+  const swUrl = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swUrl, {scope: './'}).catch(() => {});
 }
+
+// ── PWA: Install prompt ───────────────────────────────────────────────
+let _deferredPrompt = null;
+const _isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const _isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _deferredPrompt = e;
+  const btn = document.getElementById('btn-pwa-install');
+  if (btn) btn.classList.add('visible');
+});
+
+window.addEventListener('appinstalled', () => {
+  _deferredPrompt = null;
+  const btn = document.getElementById('btn-pwa-install');
+  if (btn) btn.classList.remove('visible');
+  showToast('App instalado com sucesso! 🎉');
+});
+
+// Show iOS banner automatically if on iOS and not standalone, once per session
+if (_isIOS && !_isStandalone && !sessionStorage.getItem('ios-banner-dismissed')) {
+  setTimeout(() => {
+    const banner = document.getElementById('ios-install-banner');
+    if (banner) banner.classList.add('show');
+  }, 3000);
+}
+
+function triggerPWAInstall() {
+  if (_deferredPrompt) {
+    _deferredPrompt.prompt();
+    _deferredPrompt.userChoice.then(result => {
+      _deferredPrompt = null;
+      if (result.outcome === 'accepted') {
+        showToast('Instalando... 🎉');
+      }
+    });
+  } else if (_isIOS && !_isStandalone) {
+    const banner = document.getElementById('ios-install-banner');
+    if (banner) banner.classList.add('show');
+  } else if (_isStandalone) {
+    showToast('App já instalado! ✓');
+  } else {
+    showToast('Use o menu do navegador para instalar 📲');
+  }
+}
+
+function closeIOSBanner() {
+  const banner = document.getElementById('ios-install-banner');
+  if (banner) banner.classList.remove('show');
+  sessionStorage.setItem('ios-banner-dismissed', '1');
+}
+
+function downloadApp() { triggerPWAInstall(); } // legacy compat
 
 // ── POLLING: silent background refresh every 30 minutes ───────────────
 setInterval(() => { if (currentUser) reloadCurrentTab(); }, 30 * 60 * 1000);

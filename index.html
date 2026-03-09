@@ -543,6 +543,19 @@
   }
   #toast.show { transform: translateX(-50%) translateY(0); }
 
+  /* ── READ-ONLY MODE ── */
+  .readonly-banner {
+    display: none;
+    align-items: center; gap: 8px;
+    padding: 8px 14px; border-radius: 10px;
+    background: #fff8e1; border: 1.5px solid #ffe082;
+    color: #7a5c00; font-size: 12px; font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .readonly-banner.visible { display: flex; }
+
+  body.viewing-other .add-controls { display: none !important; }
+
   @media (max-width: 420px) {
     .field-row input, .field-row select { min-width: 110px; font-size: 13px; }
     .card-text { font-size: 14px; }
@@ -635,11 +648,14 @@
         <div style="font-size:12px;opacity:0.8">Lista de presentes</div>
       </div>
     </div>
-    <div class="field-row">
+    <div class="readonly-banner" id="readonly-presentes">
+      👁 Você está visualizando os presentes de <strong id="readonly-name-presentes"></strong>
+    </div>
+    <div class="field-row add-controls" id="form-presentes">
       <input type="text" id="presente-nome" placeholder="Nome do presente..." />
       <input type="text" id="presente-link" placeholder="Link (opcional)..." />
     </div>
-    <div class="add-form">
+    <div class="add-form add-controls" id="form-presentes-2">
       <input type="text" id="presente-obs" placeholder="Observação (opcional)..." />
       <button class="btn-add" onclick="addPresente()" title="Adicionar">+</button>
     </div>
@@ -657,8 +673,11 @@
         <div style="font-size:12px;opacity:0.8">Hábitos e regras</div>
       </div>
     </div>
+    <div class="readonly-banner" id="readonly-cuidados">
+      👁 Você está visualizando os cuidados de <strong id="readonly-name-cuidados"></strong>
+    </div>
     <h2 class="section-title">✅ O que fazer <span class="badge badge-green">FAZER</span></h2>
-    <div class="add-form">
+    <div class="add-form add-controls" id="form-fazer">
       <input type="text" id="input-fazer" placeholder="Ex: Regar as plantas..." />
       <select id="freq-fazer">
         <option value="diário">Diário</option>
@@ -673,7 +692,7 @@
     </div>
     <div class="divider"></div>
     <h2 class="section-title">❌ O que não fazer <span class="badge badge-red">EVITAR</span></h2>
-    <div class="add-form">
+    <div class="add-form add-controls" id="form-nao-fazer">
       <input type="text" id="input-nao-fazer" placeholder="Ex: Deixar louça suja..." />
       <button class="btn-add" onclick="addCuidado('nao_fazer')">+</button>
     </div>
@@ -691,12 +710,15 @@
         <div style="font-size:12px;opacity:0.8">Casa</div>
       </div>
     </div>
+    <div class="readonly-banner" id="readonly-tarefas">
+      👁 Você está visualizando a casa de <strong id="readonly-name-tarefas"></strong>
+    </div>
     <h2 class="section-title">🧹 Tarefas <span class="badge badge-blue">FAZER</span></h2>
-    <div class="add-form">
+    <div class="add-form add-controls" id="form-tarefas">
       <input type="text" id="input-tarefa" placeholder="Ex: Lavar roupa..." />
       <button class="btn-add" onclick="addTarefa()">+</button>
     </div>
-    <div class="field-row">
+    <div class="field-row add-controls" id="form-tarefas-dia">
       <select id="tarefa-dia">
         <option value="">Dia da semana (opcional)</option>
         <option value="segunda">Segunda</option>
@@ -713,7 +735,7 @@
     </div>
     <div class="divider"></div>
     <h2 class="section-title">🛒 Compras <span class="badge badge-orange">LISTA</span></h2>
-    <div class="add-form">
+    <div class="add-form add-controls" id="form-compras">
       <input type="text" id="input-compra" placeholder="Ex: Detergente, arroz..." />
       <input type="text" id="input-compra-qtd" placeholder="Qtd" style="flex:0;width:72px;" />
       <button class="btn-add" onclick="addCompra()">+</button>
@@ -783,7 +805,8 @@
 
 <script>
 const DB_URL = 'https://amor-f3174-default-rtdb.firebaseio.com';
-let currentUser = null; // 'pedro' | 'manu'
+let currentUser = null; // whose data is being VIEWED ('pedro'|'manu')
+let loggedUser  = null; // who is LOGGED IN ('pedro'|'manu')
 
 // ── FIREBASE ─────────────────────────────────────────────────────────
 async function fbGet(path) {
@@ -865,6 +888,7 @@ async function doLogin() {
 
     // Success
     currentUser = matched;
+    loggedUser  = matched;
     const label = matched === 'pedro' ? 'Pedro' : 'Manu';
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
@@ -880,6 +904,7 @@ async function doLogin() {
 
 function doLogout() {
   currentUser = null;
+  loggedUser  = null;
   document.getElementById('app').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('login-user').value = '';
@@ -945,15 +970,26 @@ async function saveSettings() {
 // ── USER SWITCH ───────────────────────────────────────────────────────
 function selectUser(user) {
   currentUser = user;
-  const label = user === 'pedro' ? 'Pedro' : 'Manu';
-  document.body.className = user === 'pedro' ? 'is-pedro' : 'is-manu';
+  const label    = user === 'pedro' ? 'Pedro' : 'Manu';
+  const canEdit  = (user === loggedUser);
+
+  document.body.className = (user === 'pedro' ? 'is-pedro' : 'is-manu') + (canEdit ? '' : ' viewing-other');
+
   document.getElementById('ubtn-pedro').classList.toggle('active', user === 'pedro');
   document.getElementById('ubtn-manu').classList.toggle('active', user === 'manu');
-  document.getElementById('logged-name').textContent = label;
+  document.getElementById('logged-name').textContent = loggedUser === 'pedro' ? 'Pedro' : 'Manu';
+
   ['presentes','cuidados','tarefas'].forEach(s => {
     const el = document.getElementById(`banner-name-${s}`);
     if (el) el.textContent = label;
+
+    // readonly banner
+    const banner = document.getElementById(`readonly-${s}`);
+    const bannerName = document.getElementById(`readonly-name-${s}`);
+    if (banner) banner.classList.toggle('visible', !canEdit);
+    if (bannerName) bannerName.textContent = label;
   });
+
   reloadCurrentTab();
 }
 
@@ -985,6 +1021,7 @@ async function loadPresentes() {
 }
 function renderPresentes(data) {
   const list = document.getElementById('list-presentes');
+  const canEdit = (currentUser === loggedUser);
   const keys = Object.keys(data);
   if (!keys.length) { list.innerHTML = '<div class="empty"><div class="empty-icon">🎁</div><p>Nenhum presente ainda.<br>Adicione o primeiro!</p></div>'; return; }
   keys.sort((a,b) => (data[a].status==='comprado'?1:0)-(data[b].status==='comprado'?1:0));
@@ -996,16 +1033,15 @@ function renderPresentes(data) {
     card.className = `card accent${p.status==='comprado'?' done-card':''}`;
     card.innerHTML = `
       <div class="card-body">
-        <div class="card-text" contenteditable="true" onblur="editField('${path}/nome',this.textContent)">${esc(p.nome)}</div>
+        <div class="card-text" ${canEdit ? `contenteditable="true" onblur="editField('${path}/nome',this.textContent)"` : ''}>${esc(p.nome)}</div>
         ${p.link ? `<a class="card-link" href="${esc(p.link)}" target="_blank">🔗 ver produto</a>` : ''}
         ${p.obs  ? `<div style="font-size:12px;color:var(--text-soft);margin-top:4px">💬 ${esc(p.obs)}</div>` : ''}
         <div class="card-meta">
-          <button class="btn-status ${p.status}" onclick="togglePresente('${k}')">${p.status==='comprado'?'✓ comprado':'⏳ pendente'}</button>
+          ${canEdit ? `<button class="btn-status ${p.status}" onclick="togglePresente('${k}')">${p.status==='comprado'?'✓ comprado':'⏳ pendente'}</button>`
+                    : `<span class="meta-tag ${p.status==='comprado'?'meta-status-comprado':'meta-status-pendente'}">${p.status==='comprado'?'✓ comprado':'⏳ pendente'}</span>`}
         </div>
       </div>
-      <div class="card-actions">
-        <button class="btn-delete" onclick="deleteItem('${path}',loadPresentes)">🗑</button>
-      </div>`;
+      ${canEdit ? `<div class="card-actions"><button class="btn-delete" onclick="deleteItem('${path}',loadPresentes)">🗑</button></div>` : ''}`;
     list.appendChild(card);
   });
 }
@@ -1046,6 +1082,7 @@ async function loadCuidados() {
 function renderCuidados(tipo, data) {
   const listId = tipo==='fazer' ? 'list-fazer' : 'list-nao-fazer';
   const list = document.getElementById(listId);
+  const canEdit = (currentUser === loggedUser);
   const keys = Object.keys(data);
   const cls = tipo==='fazer' ? 'do' : 'dont';
   if (!keys.length) {
@@ -1060,14 +1097,12 @@ function renderCuidados(tipo, data) {
     card.className = `card ${cls}`;
     card.innerHTML = `
       <div class="card-body">
-        <div class="card-text" contenteditable="true" onblur="editField('${path}/descricao',this.textContent)">${esc(item.descricao)}</div>
+        <div class="card-text" ${canEdit ? `contenteditable="true" onblur="editField('${path}/descricao',this.textContent)"` : ''}>${esc(item.descricao)}</div>
         <div class="card-meta">
           ${item.frequencia ? `<span class="meta-tag meta-freq">🔄 ${esc(item.frequencia)}</span>` : ''}
         </div>
       </div>
-      <div class="card-actions">
-        <button class="btn-delete" onclick="deleteItem('${path}',loadCuidados)">🗑</button>
-      </div>`;
+      ${canEdit ? `<div class="card-actions"><button class="btn-delete" onclick="deleteItem('${path}',loadCuidados)">🗑</button></div>` : ''}`;
     list.appendChild(card);
   });
 }
@@ -1094,6 +1129,7 @@ async function loadTarefas() {
 }
 function renderTarefas(data) {
   const list = document.getElementById('list-tarefas');
+  const canEdit = (currentUser === loggedUser);
   const keys = Object.keys(data);
   if (!keys.length) { list.innerHTML = '<div class="empty"><div class="empty-icon">🧹</div><p>Nenhuma tarefa ainda.</p></div>'; return; }
   const diasOrder = ['segunda','terça','quarta','quinta','sexta','sábado','domingo',''];
@@ -1109,16 +1145,16 @@ function renderTarefas(data) {
     card.className = `card accent${t.concluido?' done-card':''}`;
     card.innerHTML = `
       <div class="card-body">
-        <div class="card-text" contenteditable="true" onblur="editField('${path}/tarefa',this.textContent)">${esc(t.tarefa)}</div>
+        <div class="card-text" ${canEdit ? `contenteditable="true" onblur="editField('${path}/tarefa',this.textContent)"` : ''}>${esc(t.tarefa)}</div>
         <div class="card-meta">
           ${t.dia_semana ? `<span class="meta-tag meta-dia">📅 ${esc(t.dia_semana)}</span>` : ''}
           <span class="meta-tag ${t.concluido?'meta-status-comprado':'meta-status-pendente'}">${t.concluido?'✓ feito':'⏳ pendente'}</span>
         </div>
       </div>
-      <div class="card-actions">
+      ${canEdit ? `<div class="card-actions">
         <button class="btn-check${t.concluido?' checked':''}" onclick="toggleTarefa('${k}',${!t.concluido})">✓</button>
         <button class="btn-delete" onclick="deleteItem('${path}',loadTarefas)">🗑</button>
-      </div>`;
+      </div>` : ''}`;
     list.appendChild(card);
   });
 }
@@ -1146,6 +1182,7 @@ async function loadCompras() {
 }
 function renderCompras(data) {
   const list = document.getElementById('list-compras');
+  const canEdit = (currentUser === loggedUser);
   const keys = Object.keys(data);
   if (!keys.length) { list.innerHTML = '<div class="empty"><div class="empty-icon">🛒</div><p>Lista de compras vazia!</p></div>'; return; }
   keys.sort((a,b) => (data[a].comprado?1:0)-(data[b].comprado?1:0));
@@ -1157,16 +1194,16 @@ function renderCompras(data) {
     card.className = `card accent${c.comprado?' done-card':''}`;
     card.innerHTML = `
       <div class="card-body">
-        <div class="card-text" contenteditable="true" onblur="editField('${path}/item',this.textContent)">${esc(c.item)}</div>
+        <div class="card-text" ${canEdit ? `contenteditable="true" onblur="editField('${path}/item',this.textContent)"` : ''}>${esc(c.item)}</div>
         <div class="card-meta">
           ${c.qtd ? `<span class="meta-tag meta-freq">📦 ${esc(c.qtd)}</span>` : ''}
           <span class="meta-tag ${c.comprado?'meta-status-comprado':'meta-status-pendente'}">${c.comprado?'✓ comprado':'⏳ falta'}</span>
         </div>
       </div>
-      <div class="card-actions">
+      ${canEdit ? `<div class="card-actions">
         <button class="btn-check${c.comprado?' checked':''}" onclick="toggleCompra('${k}',${!c.comprado})">✓</button>
         <button class="btn-delete" onclick="deleteItem('${path}',loadCompras)">🗑</button>
-      </div>`;
+      </div>` : ''}`;
     list.appendChild(card);
   });
 }

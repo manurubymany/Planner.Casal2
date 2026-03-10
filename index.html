@@ -972,6 +972,7 @@
 <meta name="apple-mobile-web-app-title" content="Pedro & Manu">
 <meta name="theme-color" content="#1e1510">
 <link id="pwa-manifest-link" rel="manifest" href="#">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231e1510'/><path d='M50 72 L24 46 a18 18 0 0 1 26-24 a18 18 0 0 1 26 24Z' fill='%23b5613c'/></svg>">
 </head>
 <body class="is-pedro">
 
@@ -1937,32 +1938,33 @@ async function deleteItem(path, reloadFn) {
   showToast('Removido 🗑'); reloadFn();
 }
 
-// ── PWA: Manifest inline ──────────────────────────────────────────────
+// ── PWA: Manifest inline via data URI ────────────────────────────────
 (function injectManifest() {
+  const iconSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%231e1510'/><path d='M256 360 L130 234 a90 90 0 0 1 126-126l0 0a90 90 0 0 1 126 126Z' fill='%23b5613c'/><circle cx='256' cy='200' r='30' fill='rgba(255,255,255,0.2)'/></svg>`;
   const manifest = {
     name: "Pedro & Manu ♡",
     short_name: "Pedro & Manu",
     description: "Nosso cantinho organizado",
-    start_url: "./",
+    start_url: location.pathname || "/",
+    scope: location.pathname.replace(/[^/]*$/, "") || "/",
     display: "standalone",
     orientation: "portrait",
     theme_color: "#1e1510",
     background_color: "#faf6f0",
     icons: [
       {
-        src: "data:image/svg+xml," + encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%231e1510'/><path d='M256 360 L130 234 a90 90 0 0 1 126-126l0 0a90 90 0 0 1 126 126Z' fill='%23b5613c'/><circle cx='256' cy='200' r='30' fill='rgba(255,255,255,0.2)'/></svg>`),
+        src: "data:image/svg+xml," + encodeURIComponent(iconSvg),
         sizes: "512x512",
         type: "image/svg+xml",
         purpose: "any maskable"
       }
     ],
-    screenshots: [],
     categories: ["lifestyle", "productivity"]
   };
-  const blob = new Blob([JSON.stringify(manifest)], {type: 'application/manifest+json'});
-  const url = URL.createObjectURL(blob);
+  // Use data URI instead of blob URL — avoids "start_url invalid" browser warning
+  const dataUri = "data:application/manifest+json," + encodeURIComponent(JSON.stringify(manifest));
   const link = document.getElementById('pwa-manifest-link');
-  if (link) link.href = url;
+  if (link) link.href = dataUri;
 })();
 
 // ── PWA: Service Worker ───────────────────────────────────────────────

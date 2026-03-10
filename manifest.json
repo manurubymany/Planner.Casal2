@@ -7,12 +7,18 @@
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#1e1510",
-  "background_color": "#faf6f0",
+  "background_color": "#1e1510",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20512%20512'%3E%3Crect%20width%3D'512'%20height%3D'512'%20rx%3D'100'%20fill%3D'%231e1510'%2F%3E%3Cpath%20d%3D'M256%20360%20L130%20234%20a90%2090%200%200%201%20126-126l0%200a90%2090%200%200%201%20126%20126Z'%20fill%3D'%23b5613c'%2F%3E%3C%2Fsvg%3E",
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ],

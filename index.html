@@ -876,6 +876,86 @@
   .btn-download-settings:hover { background: var(--parch-warm); color: var(--ink); }
 
   /* ══════════════════════════════════════
+     RECEITA CARDS
+  ══════════════════════════════════════ */
+  .receita-card {
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow-card);
+    transition: all 0.2s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .receita-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-raised);
+    border-color: var(--terra);
+  }
+  .receita-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .receita-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+  .receita-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .receita-nome {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .receita-meta-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .receita-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    background: var(--parch-warm);
+    color: var(--ink-soft);
+  }
+  .receita-tag.cat {
+    background: var(--terra-light);
+    color: var(--terra);
+    font-weight: 600;
+  }
+  .receita-preview {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* ══════════════════════════════════════
      TOAST
   ══════════════════════════════════════ */
   #toast {
@@ -1062,6 +1142,9 @@
   <button class="tab-btn" data-tab="tarefas">
     <span class="tab-icon">🏠</span><span>Casa</span>
   </button>
+  <button class="tab-btn" data-tab="receitas">
+    <span class="tab-icon">👨‍🍳</span><span>Receitas</span>
+  </button>
 </nav>
 
 <div class="content">
@@ -1189,6 +1272,38 @@
     </div>
   </div>
 
+  <!-- RECEITAS -->
+  <div class="tab-panel" id="panel-receitas">
+    <div class="shared-banner">
+      <span style="font-size:24px">👨‍🍳</span>
+      <div>
+        <div class="shared-banner-title">Nossas Receitas</div>
+        <div class="shared-banner-sub">Pedro &amp; Manu — receitas compartilhadas</div>
+      </div>
+      <span class="shared-badge">Compartilhado</span>
+    </div>
+
+    <div class="section-header-row" style="margin-bottom:12px">
+      <h2 class="section-title">📖 Receitas <span class="badge badge-terra">COZINHA</span></h2>
+      <button class="btn-pill btn-pill-terra add-controls" onclick="openReceitaModal()">+ Nova Receita</button>
+    </div>
+    
+    <div class="compras-subcats" id="receitas-subcats">
+      <button class="subcat-btn active" onclick="setReceitaFilter('todos',this)">🔎 Todas</button>
+      <button class="subcat-btn" onclick="setReceitaFilter('Massas',this)">🍝 Massas</button>
+      <button class="subcat-btn" onclick="setReceitaFilter('Doces',this)">🍰 Doces</button>
+      <button class="subcat-btn" onclick="setReceitaFilter('Salgados',this)">🥐 Salgados</button>
+      <button class="subcat-btn" onclick="setReceitaFilter('Carnes',this)">🍖 Carnes</button>
+      <button class="subcat-btn" onclick="setReceitaFilter('Sopas',this)">🍲 Sopas</button>
+      <button class="subcat-btn" onclick="setReceitaFilter('Bebidas',this)">🥤 Bebidas</button>
+      <button class="subcat-btn" onclick="setReceitaFilter('Outros',this)">🍽️ Outros</button>
+    </div>
+    
+    <div class="list" id="list-receitas">
+      <div class="loading"><div class="spinner"></div>Carregando...</div>
+    </div>
+  </div>
+
 </div><!-- /content -->
 </div><!-- /app -->
 
@@ -1304,6 +1419,97 @@
         <textarea id="lm-obs" placeholder="Detalhes, tamanho, cor, quantidade..."></textarea>
       </div>
       <button class="btn-lm-save" onclick="saveLarModal()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MODAL: ADICIONAR RECEITA
+═══════════════════════════════════════ -->
+<div class="lar-modal-backdrop hidden" id="receita-modal-backdrop" onclick="closeReceitaModalOutside(event)">
+  <div class="lar-modal" style="max-width:650px">
+    <div class="lar-modal-header">
+      <h3>👨‍🍳 Nova Receita</h3>
+      <button class="modal-close" onclick="closeReceitaModal()">✕</button>
+    </div>
+    <div class="lar-modal-body">
+      <div class="lmf">
+        <label>Nome da receita</label>
+        <input type="text" id="rm-nome" placeholder="Ex: Bolo de Chocolate..." />
+      </div>
+      <div class="lmf-row">
+        <div class="lmf">
+          <label>Categoria</label>
+          <select id="rm-categoria">
+            <option value="Massas">🍝 Massas</option>
+            <option value="Doces">🍰 Doces</option>
+            <option value="Salgados">🥐 Salgados</option>
+            <option value="Carnes">🍖 Carnes</option>
+            <option value="Sopas">🍲 Sopas</option>
+            <option value="Bebidas">🥤 Bebidas</option>
+            <option value="Outros">🍽️ Outros</option>
+          </select>
+        </div>
+        <div class="lmf">
+          <label>Tempo de preparo</label>
+          <input type="text" id="rm-tempo" placeholder="Ex: 30 minutos" />
+        </div>
+      </div>
+      <div class="lmf-row">
+        <div class="lmf">
+          <label>Porções</label>
+          <input type="text" id="rm-porcoes" placeholder="Ex: 4 porções" />
+        </div>
+        <div class="lmf">
+          <label>Dificuldade</label>
+          <select id="rm-dificuldade">
+            <option value="Fácil">😊 Fácil</option>
+            <option value="Médio">🤔 Médio</option>
+            <option value="Difícil">😰 Difícil</option>
+          </select>
+        </div>
+      </div>
+      <div class="lmf">
+        <label>Ingredientes (um por linha)</label>
+        <textarea id="rm-ingredientes" placeholder="Ex:&#10;2 xícaras de farinha de trigo&#10;3 ovos&#10;1 xícara de açúcar&#10;200g de chocolate em pó" rows="6"></textarea>
+      </div>
+      <div class="lmf">
+        <label>Modo de preparo (passos numerados)</label>
+        <textarea id="rm-passos" placeholder="Ex:&#10;1. Bata os ovos com o açúcar até formar um creme&#10;2. Adicione a farinha aos poucos&#10;3. Misture o chocolate em pó&#10;4. Asse em forno pré-aquecido a 180°C por 40 minutos" rows="8"></textarea>
+      </div>
+      <div class="lmf">
+        <label>Dicas e observações (opcional)</label>
+        <textarea id="rm-dicas" placeholder="Dicas especiais, variações, como servir..." rows="3"></textarea>
+      </div>
+      <button class="btn-lm-save" onclick="saveReceitaModal()">Salvar Receita 👨‍🍳</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MODAL: VISUALIZAR RECEITA
+═══════════════════════════════════════ -->
+<div class="lar-modal-backdrop hidden" id="receita-view-backdrop" onclick="closeReceitaViewOutside(event)">
+  <div class="lar-modal" style="max-width:700px">
+    <div class="lar-modal-header">
+      <h3 id="rv-nome">—</h3>
+      <button class="modal-close" onclick="closeReceitaView()">✕</button>
+    </div>
+    <div class="lar-modal-body">
+      <div class="receita-meta-row" id="rv-meta" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px"></div>
+      <div class="receita-section">
+        <h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--terra);margin-bottom:12px;font-weight:600">📝 Ingredientes</h4>
+        <div id="rv-ingredientes" style="background:var(--parch-warm);padding:16px;border-radius:12px;line-height:1.8;white-space:pre-line"></div>
+      </div>
+      <div class="receita-section" style="margin-top:20px">
+        <h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--terra);margin-bottom:12px;font-weight:600">👨‍🍳 Modo de Preparo</h4>
+        <div id="rv-passos" style="background:var(--parch-warm);padding:16px;border-radius:12px;line-height:1.9;white-space:pre-line"></div>
+      </div>
+      <div class="receita-section" id="rv-dicas-section" style="margin-top:20px;display:none">
+        <h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--terra);margin-bottom:12px;font-weight:600">💡 Dicas</h4>
+        <div id="rv-dicas" style="background:var(--terra-light);padding:16px;border-radius:12px;line-height:1.8;font-style:italic;color:var(--ink-soft);white-space:pre-line"></div>
+      </div>
+      <button class="btn-delete" style="width:100%;margin-top:24px;padding:12px;font-size:14px" onclick="deleteReceitaFromView()">🗑 Excluir receita</button>
     </div>
   </div>
 </div>
@@ -1571,6 +1777,7 @@ function reloadCurrentTab() {
   if (active === 'presentes') loadPresentes();
   else if (active === 'cuidados') loadCuidados();
   else if (active === 'tarefas') { loadTarefas(); loadCompras(); loadLar(); }
+  else if (active === 'receitas') loadReceitas();
 }
 
 // ── PRESENTES ─────────────────────────────────────────────────────────
@@ -1924,6 +2131,173 @@ async function deleteLar(path) {
   await fbDelete(path);
   showToast('Removido 🗑');
   loadLar();
+}
+
+// ── RECEITAS ──────────────────────────────────────────────────────────
+let receitaFilter = 'todos';
+let currentReceitaKey = null;
+const receitaIcoMap = {
+  'Massas':'🍝','Doces':'🍰','Salgados':'🥐',
+  'Carnes':'🍖','Sopas':'🍲','Bebidas':'🥤','Outros':'🍽️'
+};
+const receitaIcoBg = {
+  'Massas':'#fff4e6','Doces':'#ffe6f0','Salgados':'#fff9e6',
+  'Carnes':'#ffe8e8','Sopas':'#e8f4ff','Bebidas':'#f0e8ff','Outros':'#f0f0f0'
+};
+
+async function loadReceitas() {
+  const el = document.getElementById('list-receitas');
+  if (!el) return;
+  el.innerHTML = '<div class="loading"><div class="spinner"></div>Carregando...</div>';
+  try {
+    let data = await fbGet('casa/receitas');
+    renderReceitas(data||{});
+    setSyncStatus('connected','sincronizado ✓');
+  } catch(e) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><p style="font-size:12px;color:var(--red)">${e.message}</p></div>`;
+    setSyncStatus('error','erro de conexão');
+  }
+}
+
+function setReceitaFilter(cat, btn) {
+  receitaFilter = cat;
+  document.querySelectorAll('#receitas-subcats .subcat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadReceitas();
+}
+
+function renderReceitas(data) {
+  const list = document.getElementById('list-receitas');
+  if (!list) return;
+  let keys = Object.keys(data);
+  if (receitaFilter !== 'todos') keys = keys.filter(k => data[k].categoria === receitaFilter);
+  if (!keys.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">👨‍🍳</div><p>Nenhuma receita nesta categoria.</p></div>';
+    return;
+  }
+  list.innerHTML = '';
+  keys.forEach(k => {
+    const rec = data[k];
+    const card = document.createElement('div');
+    card.className = 'receita-card';
+    card.onclick = () => openReceitaView(k, rec);
+    
+    const ico = receitaIcoMap[rec.categoria] || '🍽️';
+    const bg  = receitaIcoBg[rec.categoria]  || '#f0f0f0';
+    
+    const ingredientesPreview = rec.ingredientes ? rec.ingredientes.split('\n').slice(0,2).join(', ') + '...' : '';
+    
+    card.innerHTML = `
+      <div class="receita-header">
+        <div class="receita-icon" style="background:${bg}">${ico}</div>
+        <div class="receita-info">
+          <h4 class="receita-nome">${esc(rec.nome)}</h4>
+          <div class="receita-meta-tags">
+            <span class="receita-tag cat">${esc(rec.categoria)}</span>
+            ${rec.tempo ? `<span class="receita-tag">⏱️ ${esc(rec.tempo)}</span>` : ''}
+            ${rec.porcoes ? `<span class="receita-tag">🍽️ ${esc(rec.porcoes)}</span>` : ''}
+            ${rec.dificuldade ? `<span class="receita-tag">${rec.dificuldade}</span>` : ''}
+          </div>
+        </div>
+      </div>
+      ${ingredientesPreview ? `<div class="receita-preview">${esc(ingredientesPreview)}</div>` : ''}
+    `;
+    list.appendChild(card);
+  });
+}
+
+function openReceitaModal() {
+  document.getElementById('rm-nome').value = '';
+  document.getElementById('rm-categoria').value = 'Massas';
+  document.getElementById('rm-tempo').value = '';
+  document.getElementById('rm-porcoes').value = '';
+  document.getElementById('rm-dificuldade').value = 'Fácil';
+  document.getElementById('rm-ingredientes').value = '';
+  document.getElementById('rm-passos').value = '';
+  document.getElementById('rm-dicas').value = '';
+  document.getElementById('receita-modal-backdrop').classList.remove('hidden');
+}
+
+function closeReceitaModal() {
+  document.getElementById('receita-modal-backdrop').classList.add('hidden');
+}
+
+function closeReceitaModalOutside(e) {
+  if (e.target === document.getElementById('receita-modal-backdrop')) closeReceitaModal();
+}
+
+async function saveReceitaModal() {
+  const nome = document.getElementById('rm-nome').value.trim();
+  if (!nome) { document.getElementById('rm-nome').focus(); return; }
+  
+  const ingredientes = document.getElementById('rm-ingredientes').value.trim();
+  if (!ingredientes) { document.getElementById('rm-ingredientes').focus(); return; }
+  
+  const passos = document.getElementById('rm-passos').value.trim();
+  if (!passos) { document.getElementById('rm-passos').focus(); return; }
+  
+  const obj = {
+    nome,
+    categoria: document.getElementById('rm-categoria').value,
+    tempo: document.getElementById('rm-tempo').value.trim(),
+    porcoes: document.getElementById('rm-porcoes').value.trim(),
+    dificuldade: document.getElementById('rm-dificuldade').value,
+    ingredientes,
+    passos,
+    dicas: document.getElementById('rm-dicas').value.trim()
+  };
+  
+  await fbSet(`casa/receitas/${genKey()}`, obj);
+  closeReceitaModal();
+  showToast('Receita salva! 👨‍🍳');
+  loadReceitas();
+}
+
+function openReceitaView(key, receita) {
+  currentReceitaKey = key;
+  document.getElementById('rv-nome').textContent = `👨‍🍳 ${receita.nome}`;
+  
+  // Meta info
+  const metaEl = document.getElementById('rv-meta');
+  let metaHtml = `<span class="receita-tag cat">${esc(receita.categoria)}</span>`;
+  if (receita.tempo) metaHtml += `<span class="receita-tag">⏱️ ${esc(receita.tempo)}</span>`;
+  if (receita.porcoes) metaHtml += `<span class="receita-tag">🍽️ ${esc(receita.porcoes)}</span>`;
+  if (receita.dificuldade) metaHtml += `<span class="receita-tag">${esc(receita.dificuldade)}</span>`;
+  metaEl.innerHTML = metaHtml;
+  
+  // Ingredientes
+  document.getElementById('rv-ingredientes').textContent = receita.ingredientes || '—';
+  
+  // Passos
+  document.getElementById('rv-passos').textContent = receita.passos || '—';
+  
+  // Dicas (opcional)
+  if (receita.dicas && receita.dicas.trim()) {
+    document.getElementById('rv-dicas').textContent = receita.dicas;
+    document.getElementById('rv-dicas-section').style.display = 'block';
+  } else {
+    document.getElementById('rv-dicas-section').style.display = 'none';
+  }
+  
+  document.getElementById('receita-view-backdrop').classList.remove('hidden');
+}
+
+function closeReceitaView() {
+  document.getElementById('receita-view-backdrop').classList.add('hidden');
+  currentReceitaKey = null;
+}
+
+function closeReceitaViewOutside(e) {
+  if (e.target === document.getElementById('receita-view-backdrop')) closeReceitaView();
+}
+
+async function deleteReceitaFromView() {
+  if (!currentReceitaKey) return;
+  if (!confirm('Tem certeza que deseja excluir esta receita?')) return;
+  await fbDelete(`casa/receitas/${currentReceitaKey}`);
+  closeReceitaView();
+  showToast('Receita excluída 🗑');
+  loadReceitas();
 }
 
 // ── GENERICS ──────────────────────────────────────────────────────────
